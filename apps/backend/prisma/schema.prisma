@@ -26,6 +26,7 @@ model Produit {
   id          Int       @id @default(autoincrement())
   nom         String    @db.VarChar(255)
   description String?
+  imgPath     String
   prix        Decimal   @db.Decimal(10,2)
   stock       Int       @default(0)
   createdAt   DateTime  @default(now())

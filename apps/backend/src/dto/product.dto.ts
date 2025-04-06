@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty, IsNumber, IsString } from "class-validator"
+import { IsEmail, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator"
 import { getCallSites } from "node:util"
 
 export class ProdDto {  //class et non interface pour utiliser les decorateur de class validator (voir doc nestJs pipes)
@@ -8,7 +8,8 @@ export class ProdDto {  //class et non interface pour utiliser les decorateur de
     nom: string;
 
     @IsString()
-    description: string;
+    @IsOptional()
+    description?: string;
 
     @IsString()
     @IsNotEmpty()

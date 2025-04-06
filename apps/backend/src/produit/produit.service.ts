@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { ProdDto } from 'src/dto/product.dto';
+import { ProductResponseDto } from 'src/dto/product-response.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class ProduitService {
@@ -27,7 +29,24 @@ export class ProduitService {
     }
   }
 
+  // produit.service.ts
+  async getProducts():Promise<ProductResponseDto[]>  {
+    const produits = await this.prisma.produit.findMany();
+    //console.log({produits});
+    
+    return plainToInstance(ProductResponseDto, produits, { excludeExtraneousValues: true });
+  }
+
+  async getProduct(productId: number): Promise<ProductResponseDto>{
+    const produit = await this.prisma.produit.findUnique({
+      where: { id: productId }, 
+    });
+    return plainToInstance(ProductResponseDto, produit, { excludeExtraneousValues: true });
+  }
+
+  
+
+
 
 }
-
 

@@ -10,10 +10,10 @@ export class ProduitController {
 
   @UseGuards(AuthGuard('jwt'))
   @Post("")
-  createProduct(@Body() prod: ProdDto){
+  async createProduct(@Body() prod: ProdDto) {
     console.log("création produit");
     console.log({prod});
-    const produit = this.produitService.createProduct(prod);
+    const produit = await this.produitService.createProduct(prod);
     return produit;
   }
 

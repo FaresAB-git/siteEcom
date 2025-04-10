@@ -1,4 +1,4 @@
-import { Controller, Post, Req, Body, UseGuards, Get, Param } from "@nestjs/common";
+import { Controller, Post, Req, Body, UseGuards, Get, Param, Delete } from "@nestjs/common";
 import { ProduitService } from './produit.service';
 import { ProdDto } from "src/dto/product.dto";
 import { AuthGuard } from '@nestjs/passport';
@@ -28,6 +28,13 @@ export class ProduitController {
   async getProduct(@Param('id') productId: string):Promise<ProductResponseDto> {
     const id = parseInt(productId, 10); // Convertir le paramètre en nombre
     const produit: ProductResponseDto = await this.produitService.getProduct(id);
+    return produit;
+  }
+
+  @Delete(":id")
+  async delProduct(@Param('id') productId: string){
+    const id = parseInt(productId, 10); // Convertir le paramètre en nombre
+    const produit: ProductResponseDto = await this.produitService.delProduct(id);
     return produit;
   }
 

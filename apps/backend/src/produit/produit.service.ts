@@ -4,6 +4,7 @@ import { ProductResponseDto } from 'src/dto/product-response.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { plainToInstance } from 'class-transformer';
+import { InternalServerErrorException } from '@nestjs/common';
 
 @Injectable()
 export class ProduitService {
@@ -26,27 +27,49 @@ export class ProduitService {
       if (error instanceof PrismaClientKnownRequestError) {
         throw error;
       }
+      throw new InternalServerErrorException('Erreur lors de la création de la collection');
     }
   }
 
   // produit.service.ts
   async getProducts():Promise<ProductResponseDto[]>  {
-    const produits = await this.prisma.produit.findMany();
-    //console.log({produits});
-    
-    return plainToInstance(ProductResponseDto, produits, { excludeExtraneousValues: true });
+    try {
+      const produits = await this.prisma.produit.findMany();
+      return plainToInstance(ProductResponseDto, produits, { excludeExtraneousValues: true });
+    } catch (error) {
+      if (error instanceof PrismaClientKnownRequestError) {
+        throw error;
+      }
+      throw new InternalServerErrorException('Erreur lors de la création de la collection');
+    }
   }
 
   async getProduct(productId: number): Promise<ProductResponseDto>{
-    const produit = await this.prisma.produit.findUnique({
-      where: { id: productId }, 
-    });
-    return plainToInstance(ProductResponseDto, produit, { excludeExtraneousValues: true });
+    try {
+      const produit = await this.prisma.produit.findUnique({
+        where: { id: productId }, 
+      });
+      return plainToInstance(ProductResponseDto, produit, { excludeExtraneousValues: true }); 
+    } catch (error) {
+      if (error instanceof PrismaClientKnownRequestError) {
+        throw error;
+      }
+      throw new InternalServerErrorException('Erreur lors de la création de la collection');
+    }
   }
 
-  
-
-
-
+  async delProduct(productId: number): Promise<ProductResponseDto>{
+    try {
+      const produit = await this.prisma.produit.delete({
+        where: {id: productId},
+      });
+      return plainToInstance(ProductResponseDto, produit, { excludeExtraneousValues: true });
+    } catch (error) {
+      if (error instanceof PrismaClientKnownRequestError) {
+        throw error;
+      }
+      throw new InternalServerErrorException('Erreur lors de la création de la collection');
+    }
+  }
 }
 

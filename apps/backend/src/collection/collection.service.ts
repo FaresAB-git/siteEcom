@@ -8,6 +8,8 @@ import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { InternalServerErrorException } from '@nestjs/common';
 import { NotFoundException } from '@nestjs/common';
 import { ProductResponseDto } from 'src/dto/product-response.dto';
+import { ConflictException } from '@nestjs/common';
+import { CollectionProduitDto } from 'src/dto/collectionProduit.dto';
 
 
 @Injectable()
@@ -31,37 +33,105 @@ export class CollectionService {
     }
   }
 
-  async addProductToCollection(collectionId: number, productId: number){
+ 
+
+  
+  async addProductToCollection(collectionId: number, productId: number): Promise<CollectionProduitDto> {
     try {
       const product = await this.prisma.produit.findUnique({
-        where: {id: productId}
+        where: { id: productId },
       });
-      if(!product){
+      if (!product) {
         throw new NotFoundException(`Produit avec l'ID ${productId} introuvable`);
       }
-
+  
       const collection = await this.prisma.collection.findUnique({
-        where: {id: collectionId}
+        where: { id: collectionId },
       });
       if (!collection) {
         throw new NotFoundException(`Collection avec l'ID ${collectionId} introuvable`);
       }
-
+  
+      const existingAssociation = await this.prisma.collectionProduit.findUnique({
+        where: {
+          collectionId_produitId: {
+            collectionId,
+            produitId: productId,
+          },
+        },
+      });
+  
+      if (existingAssociation) {
+        throw new ConflictException(`Le produit ${productId} est déjà dans la collection ${collectionId}`);
+      }
+  
       const association = await this.prisma.collectionProduit.create({
         data: {
           collectionId,
           produitId: productId,
         },
       });
-      return association;
+  
+      return plainToInstance(CollectionProduitDto, association, { excludeExtraneousValues: true });
+    } catch (error) {
+      // Laisse passer les erreurs NestJS standard
+      if (
+        error instanceof NotFoundException ||
+        error instanceof ConflictException
+      ) {
+        throw error;
+      }
+  
+      if (error instanceof PrismaClientKnownRequestError) {
+        throw error;
+      }
+  
+      throw new InternalServerErrorException('Erreur lors de la création de la collection');
+    }
+  }
+  
+  
+  async removeProductFromCollection(collectionId: number, productId: number) {
+    try {
+      // Vérifie si l'association existe
+      const existingAssociation = await this.prisma.collectionProduit.findUnique({
+        where: {
+          collectionId_produitId: {
+            collectionId,
+            produitId: productId,
+          },
+        },
+      });
+  
+      if (!existingAssociation) {
+        throw new NotFoundException(
+          `Le produit avec l'ID ${productId} n'est pas présent dans la collection ${collectionId}`,
+        );
+      }
+  
+      // Supprime l'association
+      await this.prisma.collectionProduit.delete({
+        where: {
+          collectionId_produitId: {
+            collectionId,
+            produitId: productId,
+          },
+        },
+      });
+  
+      return { message: 'Produit supprimé de la collection avec succès' };
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
         throw error;
       }
-      throw new InternalServerErrorException('Erreur lors de la création de la collection');
+      throw new InternalServerErrorException('Erreur lors de la suppression du produit de la collection');
     }
   }
 
+
+
+
+  
   async getProductsFromCollection(collectionId: number): Promise<ProductResponseDto[]>{
     try {
       const collection = await this.prisma.collection.findUnique({

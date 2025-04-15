@@ -89,7 +89,7 @@ async loginAdmin(dto: AuthDto) {
     }
 
     const token = await this.jwt.signAsync(payload, {
-      expiresIn: '15m',
+      expiresIn: '10h',
       secret: this.config.get('JWT_SECRET')
     })
 

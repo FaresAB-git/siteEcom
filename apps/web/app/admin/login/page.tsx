@@ -2,21 +2,26 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import style from "../../style/login.module.css";
-import { login } from "../../services/userServices";
+import { loginAdmin } from "../../services/userServices";
+import { useRouter } from 'next/navigation';
+
 
 export default function Home() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null); // Ajout d'un état pour l'erreur
+  const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null); 
     try {
       console.log(email, password);
-      const token = await login(email, password); 
+      const token = await loginAdmin(email, password); 
       console.log(token);
       console.log("Connexion réussie !");
+      
+
     } catch (error: unknown) {
       console.error("Erreur de connexion :", error);
       
@@ -55,13 +60,13 @@ export default function Home() {
           <button className={style.loginBtn} type="submit">
             Login
           </button>
-          <p className={style.registerP}>
+          {/*<p className={style.registerP}>
             Pas encore de compte ?{" "}
             <Link href="/admin/register" className={style.registerLink}>
               Créez-en
             </Link>{" "}
             un gratuitement.
-          </p>
+          </p>*/}
         </form>
       </div>
     </>

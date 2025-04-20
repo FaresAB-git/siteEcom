@@ -31,6 +31,7 @@ export class ProduitController {
     return produit;
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Delete(":id")
   async delProduct(@Param('id') productId: string){
     const id = parseInt(productId, 10); // Convertir le paramètre en nombre

@@ -2,23 +2,24 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-
+import { Request } from 'express';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   constructor(config: ConfigService) {
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: ExtractJwt.fromExtractors([
+        (req: Request) => {
+          return req?.cookies?.['access_token']; // Récupère le token
+        },
+      ]),
       ignoreExpiration: false,
-      secretOrKey: config.get<string>('JWT_SECRET', 'DEFAULT_SECRET'), // Valeur par défaut (potentiellement un probleme)
+      secretOrKey: config.get<string>('JWT_SECRET', 'DEFAULT_SECRET'),
     });
   }
 
-  // Méthode appelée automatiquement par Passport après la validation du token
-  validate(payload: { sub: number; email: string, iat: number, exp: number }) {
-    console.log({payload});
-    return { userId: payload.sub, email: payload.email }; //sera mis dans req.user et etre recup dans le controller
+  validate(payload: { sub: number; email: string; iat: number; exp: number }) {
+    console.log({ payload });  // Log du payload pour voir s'il est bien validé
+    return { userId: payload.sub, email: payload.email };
   }
-
-  
 }

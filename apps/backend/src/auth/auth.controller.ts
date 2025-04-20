@@ -26,15 +26,12 @@ export class AuthController {
     }
 
     @Post('loginCookie/admin')
-    async loginAdminWithCookie(
-    @Body() dto: AuthDto,
-    @Res({ passthrough: true }) res: Response
-  ) {
+    async loginAdminWithCookie(@Body() dto: AuthDto, @Res({ passthrough: true }) res: Response) {
     const tokenData = await this.authService.loginAdmin(dto);
 
     res.cookie('access_token', tokenData.access_token, {
       httpOnly: true,           // Protège contre le XSS
-      secure: true,             // À mettre à true en prod (HTTPS obligatoire)
+      //secure: true,             // À mettre à true en prod (HTTPS obligatoire)
       sameSite: 'lax',          // Protection CSRF de base
       maxAge: 10 * 60 * 60 * 1000, // 10 heures en ms
     });

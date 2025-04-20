@@ -82,21 +82,21 @@ async loginAdmin(dto: AuthDto) {
 }
 
 
-  async signToken(userId: number, email: string):Promise<{access_token: string}>{
-    const payload = {
-      sub: userId,
-      email
-    }
-
-    const token = await this.jwt.signAsync(payload, {
-      expiresIn: '10h',
-      secret: this.config.get('JWT_SECRET')
-    })
-
-    return{
-      access_token:token
-    };
-    
+async signToken(userId: number, email: string):Promise<{access_token: string}>{
+  const payload = {
+    sub: userId,
+    email
   }
+
+  const token = await this.jwt.signAsync(payload, {
+    expiresIn: '10h',
+    secret: this.config.get('JWT_SECRET')
+  })
+
+  return{
+    access_token:token
+  };
+  
+}
 
 }

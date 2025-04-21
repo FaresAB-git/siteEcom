@@ -4,15 +4,22 @@ import { FaBeer } from "react-icons/fa";
 import { IoMdPricetag } from "react-icons/io";
 import { BsFillCollectionFill } from "react-icons/bs";
 import { FaWarehouse } from "react-icons/fa6";
+import { IoMdHome } from "react-icons/io";
 
  function NavBar() {
   return(  
     <>
         <div className={style.container}>
             <div className={style.linkContainer}> 
-                <Link href="" className={style.navLink}>
+                <Link href="/admin/product" className={style.navLink}>
                   <div className={style.iconContainer}>
-                    <IoMdPricetag />
+                    <IoMdHome style={{ fontSize: "1.3rem" }}/>
+                  </div> 
+                  <span className={style.linkText}> Acceuil </span> 
+                </Link>
+                <Link href="/admin/product" className={style.navLink}>
+                  <div className={style.iconContainer}>
+                    <IoMdPricetag style={{ fontSize: "1.3rem" }}/>
                   </div> 
                   <span className={style.linkText}> Produits </span> 
                 </Link>

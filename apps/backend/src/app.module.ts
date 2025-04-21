@@ -7,10 +7,11 @@ import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './user/user.module';
 import { ProduitModule } from './produit/produit.module';
 import { CollectionModule } from './collection/collection.module';
+import { CloudinaryModule } from './cloudinary/cloudinary.module';
 
 
 @Module({
-  imports: [ConfigModule.forRoot({ isGlobal: true }), AuthModule, PrismaModule, UserModule, ProduitModule, CollectionModule],
+  imports: [ConfigModule.forRoot({ isGlobal: true }), AuthModule, PrismaModule, UserModule, ProduitModule, CollectionModule, CloudinaryModule],
   controllers: [AppController],
   providers: [AppService],
 })

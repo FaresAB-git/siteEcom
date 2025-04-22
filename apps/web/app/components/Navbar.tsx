@@ -11,7 +11,7 @@ import { IoMdHome } from "react-icons/io";
     <>
         <div className={style.container}>
             <div className={style.linkContainer}> 
-                <Link href="/admin/product" className={style.navLink}>
+                <Link href="/admin/homeAdmin" className={style.navLink}>
                   <div className={style.iconContainer}>
                     <IoMdHome style={{ fontSize: "1.3rem" }}/>
                   </div> 

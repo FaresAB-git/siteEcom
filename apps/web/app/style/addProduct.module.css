@@ -1,0 +1,71 @@
+.pageTitle{
+    margin-left: 230px;
+}
+.mainContent {
+    margin-left: 200px; /* même largeur que navbar */
+    padding: 20px;
+    height: 100%;
+    background-color: whitesmoke;
+}
+
+.container {
+    width: 80%;
+    margin: auto;
+    background: whitesmoke;
+    padding: 20px;
+    height: 100%;
+}
+
+.productForm{
+    width: 30%;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    margin-top: 100px;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.input{
+    margin-bottom: 20px;
+    height: 20px;
+    border-radius: 3px;
+    border-width: 1px;
+}
+.prixInput{
+    width: 25%;
+}
+.qteInput{
+    width: 25%;
+}
+.descInput{
+    margin-bottom: 20px;
+}
+
+.imgInput::file-selector-button {
+    margin-bottom: 20px;
+    padding: 8px 16px;
+    background-color: #303030;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+  
+.imgInput::file-selector-button:hover {
+    background-color: #151515;
+}
+
+.submitButton{
+    background-color: #303030;
+    padding: 8px 16px;
+    color: white;
+    border-radius: 6px;
+}
+.submitButton:hover{
+    background-color: #151515;
+
+}

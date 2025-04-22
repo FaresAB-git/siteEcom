@@ -4,6 +4,8 @@ import { createProduct } from "../../services/productServices" // Importer la fo
 import { ProdDto } from "../../types/product.dto"; // Assure-toi que ce chemin est correct
 import Header from "../../components/Header";
 import NavBar from "../../components/Navbar";
+import style from "../../style/productAdmin.module.css"
+import Link from "next/link";
 
 export default function Home() {
   const [loading, setLoading] = useState(false);
@@ -37,7 +39,16 @@ export default function Home() {
     <>
       <Header/>
       <NavBar/>
-      <h1>page produit</h1>
+      <h2 className={style.pageTitle}>Produits</h2>
+      <div className={style.mainContent}> 
+        <div className={style.container}> 
+          <div className={style.btnContainer}> <Link href="/admin/product/addProduct" className={style.addProductBtn}> ajouter produit </Link> </div>
+          <div className={style.productTableContainer}> 
+
+          </div>
+        </div>
+        
+      </div>
       
     </>
   );

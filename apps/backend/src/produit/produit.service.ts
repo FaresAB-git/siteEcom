@@ -71,5 +71,34 @@ export class ProduitService {
       throw new InternalServerErrorException('Erreur lors de la création de la collection');
     }
   }
+
+  async updateProduct(id: number, prod: ProdDto) {
+    try {
+      const existingProduct = await this.prisma.produit.findUnique({ where: { id } });
+      if (!existingProduct) {
+        throw new Error(`Produit avec l'id ${id} introuvable`);
+      }
+  
+      const updated = await this.prisma.produit.update({
+        where: { id },
+        data: {
+          nom: prod.nom,
+          description: prod.description,
+          imgPath: prod.imgPath,
+          prix: prod.prix,
+          stock: prod.stock,
+        },
+      });
+  
+      return updated;
+    } catch (error) {
+      if (error instanceof PrismaClientKnownRequestError) {
+        throw error;
+      }
+      throw new InternalServerErrorException('Erreur lors de la mise à jour du produit');
+    }
+  }
 }
+
+
 

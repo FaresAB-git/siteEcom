@@ -37,7 +37,7 @@ export default function ProductForm({ mode, initialData, onSuccess }: ProductFor
         }
         await createProduct(product, image);
       } else {
-        await updateProduct(initialData!.id, product, image); // Fonction à créer
+        await updateProduct(initialData!.id, product, image); 
       }
       onSuccess();
     } catch (error) {

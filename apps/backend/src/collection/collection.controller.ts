@@ -41,4 +41,10 @@ export class CollectionController {
     const produits = this.collectionService.getProductsFromCollection(collectId);
     return produits;
   }
+
+  @Get('')
+  async getCollections():Promise<CollectionResponseDto[]>{
+    const produits = this.collectionService.getCollections();
+    return produits;
+  }
 }

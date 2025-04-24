@@ -24,7 +24,7 @@ import { IoMdHome } from "react-icons/io";
                   <span className={style.linkText}> Produits </span> 
                 </Link>
 
-                <Link href="" className={style.navLink}>
+                <Link href="/admin/collection" className={style.navLink}>
                   <div className={style.iconContainer}>
                     <BsFillCollectionFill />
                   </div> 

@@ -33,6 +33,18 @@ export class CollectionService {
     }
   }
 
+  async getCollections(): Promise<CollectionResponseDto[]> {
+    try {
+      const collecttions = await this.prisma.collection.findMany();
+      return plainToInstance(CollectionResponseDto, collecttions, {excludeExtraneousValues: true,});
+    } catch (error) {
+      if (error instanceof PrismaClientKnownRequestError) {
+        throw error;
+      }
+      throw new InternalServerErrorException('Erreur lors de la récupération des collections');
+    }
+  }
+
  
 
   

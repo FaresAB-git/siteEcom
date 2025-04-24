@@ -1,0 +1,160 @@
+.pageTitle{
+    margin-left: 230px;
+}
+.mainContent {
+    margin-left: 200px; /* même largeur que navbar */
+    padding: 20px;
+    height: 100%;
+    background-color: whitesmoke;
+}
+
+.container {
+    width: 80%;
+    margin: auto;
+    background: whitesmoke;
+    padding: 20px;
+    height: 100%;
+}
+
+.productForm{
+    width: 30%;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    margin-top: 100px;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.input{
+    margin-bottom: 20px;
+    height: 20px;
+    border-radius: 3px;
+    border-width: 1px;
+}
+
+.descInput{
+    margin-bottom: 20px;
+}
+
+
+.submitButton{
+    background-color: #303030;
+    padding: 8px 16px;
+    color: white;
+    border-radius: 6px;
+}
+.submitButton:hover{
+    background-color: #151515;
+
+}
+
+.openModalButton {
+    background-color: whitesmoke;
+    color: black;
+    padding: 8px 16px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .openModalButton:hover {
+    background-color: rgb(218, 211, 211);
+  }
+  
+  /* Style du modal */
+/* Overlay du modal */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4); /* transparence du fond */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+  }
+  
+  /* Contenu du modal */
+  .modalContent {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 400px;
+    max-height: 80vh;
+    overflow-y: auto;
+    position: relative;
+    z-index: 1000;
+  }
+  
+  /* Bouton pour fermer */
+  .closeButton {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .closeButton:hover {
+    background-color: darkred;
+  }
+  
+  /* Liste des produits */
+  .productList {
+    margin: 20px 0;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .productItem {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .productItem input {
+    margin-right: 10px;
+  }
+  
+  /* Bouton dans le modal */
+  .submitModalButton {
+    background-color: #303030;
+    padding: 8px 16px;
+    color: white;
+    border-radius: 6px;
+  }
+  
+  .submitModalButton:hover {
+    background-color: #151515;
+  }
+
+  .imgContainer {
+    width: 100%; /* L'image occupe la largeur disponible, mais peut être ajustée à un maximum */
+    max-width: 25px; /* Ajuste cette valeur pour la taille maximale de l'image */
+    height: auto; /* Maintient le ratio d'aspect de l'image */
+    overflow: hidden; /* S'assure que l'image qui dépasse du container soit masquée */
+    display: flex; /* Permet un alignement centré si nécessaire */
+    justify-content: center; /* Centrer horizontalement */
+    align-items: center; /* Centrer verticalement */
+    margin-right: 20px;
+  }
+  
+  /* Image elle-même */
+  .img {
+    width: 100%; /* L'image occupe la largeur de son conteneur */
+    height: auto; /* La hauteur s'ajuste automatiquement pour maintenir le ratio d'aspect */
+    object-fit: contain; /* Assure que l'image conserve son ratio d'aspect sans être coupée ni étirée */
+  }
+  

@@ -1,0 +1,113 @@
+'use client';
+import { useState, useEffect } from "react";
+import style from "../style/createCollection.module.css";
+import { CollectionResponseDto } from "../types/collection.dto";
+import { getCollections } from "../services/collectionServices";
+import { ProductResponseDto } from "../types/productResponse.dto";
+import { getProducts } from "../services/productServices";
+
+type CollectionFormProps = {
+  mode: 'create' | 'edit';
+  initialData?: CollectionResponseDto;
+};
+
+export default function CollectionForm({ mode, initialData }: CollectionFormProps) {
+
+  const [titre, setTitre] = useState("");
+  const [description, setDescription] = useState("");
+  const [allProducts, setAllProducts] = useState<ProductResponseDto[]>([]);
+  const [selectedProductIds, setSelectedProductIds] = useState<number[]>([]);
+  const [checkedProductIds, setCheckedProductIds] = useState<number[]>([]); // Liste des IDs sélectionnés dans le modal
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const toggleModal = () => {
+    setCheckedProductIds(selectedProductIds); // Lors de l'ouverture du modal, restaurer l'état des produits sélectionnés
+    setIsModalOpen((prev) => !prev);
+  };
+
+  useEffect(() => {
+    const fetchCollection = async () => {
+      try {
+        const products: ProductResponseDto[] = await getProducts();
+        console.log(products);
+        setAllProducts(products);
+      } catch (error) {
+        console.log("erreur lors de la récupération des collections");
+      }
+    };
+    fetchCollection();
+  }, []);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    // Soumettre le formulaire, envoyer la collection avec les produits sélectionnés
+    console.log("Formulaire soumis avec les produits sélectionnés:", selectedProductIds);
+  };
+
+  // Permet de conserver l'état des cases cochées même lorsque l'on ferme le modal
+  const handleProductCheck = (productId: number) => {
+    setCheckedProductIds((prev) => {
+      if (prev.includes(productId)) {
+        return prev.filter((id) => id !== productId);
+      } else {
+        return [...prev, productId];
+      }
+    });
+  };
+
+  const handleConfirmSelection = () => {
+    setSelectedProductIds(checkedProductIds);  // Met à jour la sélection confirmée
+    setCheckedProductIds([]);  // Réinitialise checkedProductIds pour la prochaine ouverture
+    toggleModal();  // Ferme le modal après la confirmation
+  };
+
+  return (
+    <div className={style.mainContent}>
+      <div className={style.container}>
+        <form className={style.productForm} onSubmit={handleSubmit}>
+          <label>Titre</label>
+          <input type="text" className={style.input} value={titre} onChange={(e) => setTitre(e.target.value)} />
+          <label>Description</label>
+          <textarea rows={6} className={style.descInput} value={description} onChange={(e) => setDescription(e.target.value)} />
+
+          <button type="button" className={style.openModalButton} onClick={toggleModal}>
+            Sélectionner les produits
+          </button>
+
+          {isModalOpen && (
+            <div className={style.overlay} onClick={toggleModal}>
+              <div className={style.modalContent} onClick={(e) => e.stopPropagation()}>
+                <h3>Sélectionner les produits</h3>
+                <button className={style.closeButton} onClick={toggleModal}>X</button>
+                <div className={style.productList}>
+                  {allProducts.map((product) => (
+                    <div key={product.id} className={style.productItem}>
+                      <input
+                        type="checkbox"
+                        id={`product-${product.id}`}
+                        onChange={() => handleProductCheck(product.id)} // Met à jour l'état local des cases
+                        checked={checkedProductIds.includes(product.id)} // Utilise checkedProductIds pour les cases actives
+                      />
+                      <div className={style.imgContainer}> 
+                        <img className={style.img} src={product.imgPath}/>
+                      </div>
+                      <label htmlFor={`product-${product.id}`}>{product.nom}</label>
+                    </div>
+                  ))}
+                </div>
+                <button type="button" className={style.submitModalButton} onClick={handleConfirmSelection}>
+                  Confirmer la sélection
+                </button>
+              </div>
+            </div>
+          )}
+
+          <button type="submit" className={style.submitButton}>
+            {mode === 'edit' ? 'Modifier la collection' : 'Créer la collection'}
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+}

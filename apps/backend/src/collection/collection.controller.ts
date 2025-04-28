@@ -15,7 +15,7 @@ export class CollectionController {
     return this.collectionService.createCollection(collection);
   }
 
-  //TODO: le type de retour (dto)
+  
   //ajouter un produit dans une collection
   @UseGuards(AuthGuard('jwt'))
   @Post(':collectionId/produit/:productId')
@@ -24,6 +24,15 @@ export class CollectionController {
     const prodId = parseInt(productId, 10); // Convertir le paramètre en nombre
     return this.collectionService.addProductToCollection(collectId, prodId);
   }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Post(':collectionId/ajouterProduits')
+  async addMultipleProductsToCollection(@Param('collectionId') collectionId: string, @Body('productIds') productIds: number[],): Promise<CollectionProduit[]> {
+    const collectId = parseInt(collectionId, 10); // Convertir le paramètre en nombre
+    return this.collectionService.addMultipleProductsToCollection(collectId, productIds);
+  }
+
+
 
   @UseGuards(AuthGuard('jwt'))
   @Delete(':collectionId/produit/:productId')

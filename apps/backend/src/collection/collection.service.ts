@@ -171,4 +171,66 @@ export class CollectionService {
       
     }
   }
+
+
+  async addMultipleProductsToCollection(collectionId: number, productIds: number[]): Promise<CollectionProduitDto[]> {
+    try {
+      const collection = await this.prisma.collection.findUnique({
+        where: { id: collectionId },
+      });
+      if (!collection) {
+        throw new NotFoundException(`Collection avec l'ID ${collectionId} introuvable`);
+      }
+  
+      const addedProducts: CollectionProduitDto[] = [];
+  
+      for (const productId of productIds) {
+        const product = await this.prisma.produit.findUnique({
+          where: { id: productId },
+        });
+        if (!product) {
+          throw new NotFoundException(`Produit avec l'ID ${productId} introuvable`);
+        }
+  
+        const existingAssociation = await this.prisma.collectionProduit.findUnique({
+          where: {
+            collectionId_produitId: {
+              collectionId,
+              produitId: productId,
+            },
+          },
+        });
+  
+        if (existingAssociation) {
+          throw new ConflictException(`Le produit ${productId} est déjà dans la collection ${collectionId}`);
+        }
+  
+        const association = await this.prisma.collectionProduit.create({
+          data: {
+            collectionId,
+            produitId: productId,
+          },
+        });
+  
+        addedProducts.push(
+          plainToInstance(CollectionProduitDto, association, { excludeExtraneousValues: true })
+        );
+      }
+  
+      return addedProducts;
+    } catch (error) {
+      if (
+        error instanceof NotFoundException ||
+        error instanceof ConflictException
+      ) {
+        throw error;
+      }
+  
+      if (error instanceof PrismaClientKnownRequestError) {
+        throw error;
+      }
+  
+      throw new InternalServerErrorException('Erreur lors de l\'ajout multiple de produits à la collection');
+    }
+  }
 }

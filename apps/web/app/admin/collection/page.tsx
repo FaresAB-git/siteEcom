@@ -6,10 +6,11 @@ import style from "../../style/collectionAdmin.module.css"
 import { useEffect, useState } from "react";
 import { CollectionResponseDto } from "../../types/collection.dto";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 
 function Collection() {
-
+  const router = useRouter();
   const [collections, setCollections] = useState<CollectionResponseDto[]>([]);
   const [error, setError] = useState<string | null>(null) ;
 
@@ -44,7 +45,9 @@ function Collection() {
             </thead>
             <tbody>
               {collections.map((collection: CollectionResponseDto) => (
-                <tr key={collection.id} className={style.row}>
+                <tr key={collection.id} className={style.row}
+                onClick={() => router.push(`/admin/collection/editCollection/${collection.id}`)}
+                >
                   <th> {collection.nom} </th>
                   <th> {collection.description} </th>
                 </tr>

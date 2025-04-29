@@ -2,17 +2,19 @@
 import { useState, useEffect } from "react";
 import style from "../style/createCollection.module.css";
 import { CollectionResponseDto } from "../types/collection.dto";
-import { getCollections } from "../services/collectionServices";
+import { addProductsToCollection, createCollection, getCollection, getCollections, getProductsFromCollection, updateCollection, updateProducts } from "../services/collectionServices";
 import { ProductResponseDto } from "../types/productResponse.dto";
-import { getProducts } from "../services/productServices";
+import { getProducts, updateProduct } from "../services/productServices";
+import { useRouter } from "next/navigation";
 
 type CollectionFormProps = {
   mode: 'create' | 'edit';
-  initialData?: CollectionResponseDto;
+  collectionToEditId?: number;
 };
 
-export default function CollectionForm({ mode, initialData }: CollectionFormProps) {
+export default function CollectionForm({ mode, collectionToEditId }: CollectionFormProps) {
 
+  const router = useRouter();
   const [titre, setTitre] = useState("");
   const [description, setDescription] = useState("");
   const [allProducts, setAllProducts] = useState<ProductResponseDto[]>([]);
@@ -35,14 +37,51 @@ export default function CollectionForm({ mode, initialData }: CollectionFormProp
       } catch (error) {
         console.log("erreur lors de la récupération des collections");
       }
+
+      if(mode == 'edit' && collectionToEditId){
+        try {
+          //TO-DO faire la route backend pour recup les info d'une collection et mettree le titre et la description
+          const collection = await getCollection(collectionToEditId);
+          setDescription(collection.description);
+          setTitre(collection.nom);
+          //const collectionInfo = await getCo
+          const productsFromCollection  = await getProductsFromCollection(collectionToEditId)
+          // Extraire les IDs des produits récupérés
+          const productIds = productsFromCollection.map((product: ProductResponseDto) => product.id);
+
+          // Mettre à jour les deux listes avec les IDs extraits
+          setSelectedProductIds(productIds);
+          setCheckedProductIds(productIds);
+        } catch (error) {
+          console.log("erreur lors de la recuperation des produit de la collection:", error);
+        }
+      }
     };
     fetchCollection();
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Soumettre le formulaire, envoyer la collection avec les produits sélectionnés
+    
     console.log("Formulaire soumis avec les produits sélectionnés:", selectedProductIds);
+
+    
+    try {
+      if(mode == 'create'){
+        const collection = await createCollection({nom: titre, description});
+        console.log(collection);
+        await addProductsToCollection(collection.id, selectedProductIds);
+      }
+      else if(mode == 'edit' && collectionToEditId){
+        const collection = await updateCollection(collectionToEditId, {nom: titre, description});
+        await updateProducts(collectionToEditId, selectedProductIds); 
+        console.log('collection modifier');
+      }
+     
+    } catch (error) {
+      console.log("error lors de la creation ou modif de la collection:", error);
+    }
+    router.push("/admin/collection");
   };
 
   // Permet de conserver l'état des cases cochées même lorsque l'on ferme le modal

@@ -38,3 +38,96 @@ export async function createCollection(collection: CollectionDto){
     return data
 }
 
+export async function getCollection(collectionId: number){
+    const response = await fetch("http://localhost:8000/collections/" + collectionId,{
+        method:'GET',
+        credentials:"include",
+        headers:{
+            'Content-Type': 'application/json',
+        },
+    });
+
+    const data = await response.json();
+
+    if(!response.ok){
+        throw new Error (data.message || 'erreur de connexion');
+    }
+
+    return data
+}
+
+export async function addProductsToCollection(collectionId: number, productIds: number[]){
+    const response = await fetch("http://localhost:8000/collections/" + collectionId + "/ajouterProduits",{
+        method:'POST',
+        credentials:"include",
+        headers:{
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ productIds })
+    });
+
+    const data = await response.json();
+
+    if(!response.ok){
+        throw new Error (data.message || 'erreur de connexion');
+    }
+
+    return data
+}
+
+export async function updateProducts(collectionId: number, productIds: number[]){
+    const response = await fetch("http://localhost:8000/collections/" + collectionId + "/remplacerProduits",{
+        method:'PUT',
+        credentials:"include",
+        headers:{
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ productIds })
+    });
+
+    const data = await response.json();
+
+    if(!response.ok){
+        throw new Error (data.message || 'erreur de connexion');
+    }
+
+    return data
+}
+
+export async function updateCollection(collectionId: number, collection:CollectionDto){
+    const response = await fetch("http://localhost:8000/collections/" + collectionId,{
+        method:'PUT',
+        credentials:"include",
+        headers:{
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(collection)
+    });
+
+    const data = await response.json();
+
+    if(!response.ok){
+        throw new Error (data.message || 'erreur de connexion');
+    }
+
+    return data
+}
+
+export async function getProductsFromCollection(collectionId: number){
+    const response = await fetch("http://localhost:8000/collections/" + collectionId + "/produits",{
+        method:'GET',
+        credentials:"include",
+        headers:{
+            'Content-Type': 'application/json',
+        },
+    });
+
+    const data = await response.json();
+
+    if(!response.ok){
+        throw new Error (data.message || 'erreur de connexion');
+    }
+
+    return data
+}
+

@@ -33,6 +33,29 @@ export class CollectionService {
     }
   }
 
+
+async updateCollection(id: number, collection: CollectionDto): Promise<CollectionResponseDto> {
+  try {
+    const updated = await this.prisma.collection.update({
+      where: { id },
+      data: {
+        nom: collection.nom,
+        description: collection.description,
+      },
+    });
+
+    return plainToInstance(CollectionResponseDto, updated, {
+      excludeExtraneousValues: true,
+    });
+  } catch (error) {
+    if (error instanceof PrismaClientKnownRequestError) {
+      throw error;
+    }
+    throw new InternalServerErrorException('Erreur lors de la mise à jour de la collection');
+  }
+}
+
+
   async getCollections(): Promise<CollectionResponseDto[]> {
     try {
       const collecttions = await this.prisma.collection.findMany();
@@ -42,6 +65,20 @@ export class CollectionService {
         throw error;
       }
       throw new InternalServerErrorException('Erreur lors de la récupération des collections');
+    }
+  }
+
+  async getCollection(collectionId: number): Promise<CollectionResponseDto> {
+    try {
+      const collecttions = await this.prisma.collection.findUnique({
+        where: { id: collectionId},
+      });
+      return plainToInstance(CollectionResponseDto, collecttions, {excludeExtraneousValues: true,});
+    } catch (error) {
+      if (error instanceof PrismaClientKnownRequestError) {
+        throw error;
+      }
+      throw new InternalServerErrorException('Erreur lors de la récupération de la collection');
     }
   }
 
@@ -233,4 +270,59 @@ export class CollectionService {
       throw new InternalServerErrorException('Erreur lors de l\'ajout multiple de produits à la collection');
     }
   }
+
+  async replaceAllProductsInCollection(collectionId: number, productIds: number[]): Promise<CollectionProduitDto[]> {
+    try {
+      const collection = await this.prisma.collection.findUnique({
+        where: { id: collectionId },
+      });
+  
+      if (!collection) {
+        throw new NotFoundException(`Collection avec l'ID ${collectionId} introuvable`);
+      }
+  
+      // Vérifie que tous les produits existent
+      const products = await this.prisma.produit.findMany({
+        where: {
+          id: { in: productIds },
+        },
+      });
+  
+      const foundProductIds = new Set(products.map(p => p.id));
+      const missingIds = productIds.filter(id => !foundProductIds.has(id));
+  
+      if (missingIds.length > 0) {
+        throw new NotFoundException(`Les produits suivants sont introuvables : ${missingIds.join(', ')}`);
+      }
+  
+      // Supprimer toutes les associations actuelles
+      await this.prisma.collectionProduit.deleteMany({
+        where: { collectionId },
+      });
+  
+      // Créer les nouvelles associations
+      const newAssociations = await Promise.all(
+        productIds.map(productId =>
+          this.prisma.collectionProduit.create({
+            data: { collectionId, produitId: productId },
+          })
+        )
+      );
+  
+      return newAssociations.map(assoc =>
+        plainToInstance(CollectionProduitDto, assoc, { excludeExtraneousValues: true })
+      );
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+  
+      if (error instanceof PrismaClientKnownRequestError) {
+        throw error;
+      }
+  
+      throw new InternalServerErrorException('Erreur lors du remplacement des produits de la collection');
+    }
+  }
+  
 }

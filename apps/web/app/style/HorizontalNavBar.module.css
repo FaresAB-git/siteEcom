@@ -1,0 +1,55 @@
+.header {
+    display: flex;
+    align-items: center;
+    padding: 16px 24px;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: relative;
+  }
+  
+  .logo {
+    flex: 0 0 auto;
+  }
+  
+  .logo a {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+    text-decoration: none;
+  }
+  
+  /* Container pour centrer le menu */
+  .nav {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+  }
+  
+  .nav a {
+    position: relative;
+    margin: 0 16px;
+    font-size: 1rem;
+    color: #555;
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  
+  .nav a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -4px; /* espace sous le texte */
+    width: 0;
+    height: 2px;
+    background-color: currentColor;
+    transition: width 0.3s ease;
+  }
+  
+  .nav a:hover {
+    color: #000;
+  }
+  
+  .nav a:hover::after {
+    width: 100%;
+  }

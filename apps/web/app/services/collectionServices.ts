@@ -56,6 +56,25 @@ export async function getCollection(collectionId: number){
     return data
 }
 
+export async function deleteCollection(collectionId: number){
+    const response = await fetch("http://localhost:8000/collections/" + collectionId,{
+        method:'DELETE',
+        credentials:"include",
+        headers:{
+            'Content-Type': 'application/json',
+        },
+    });
+
+    const data = await response.json();
+
+    if(!response.ok){
+        throw new Error (data.message || 'erreur de connexion');
+    }
+
+    return data
+}
+
+
 export async function addProductsToCollection(collectionId: number, productIds: number[]){
     const response = await fetch("http://localhost:8000/collections/" + collectionId + "/ajouterProduits",{
         method:'POST',

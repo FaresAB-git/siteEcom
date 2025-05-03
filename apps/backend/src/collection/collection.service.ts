@@ -55,6 +55,23 @@ async updateCollection(id: number, collection: CollectionDto): Promise<Collectio
   }
 }
 
+async deleteCollection(id: number): Promise<CollectionResponseDto> {
+  try {
+    const deleted = await this.prisma.collection.delete({
+      where:{id}
+    });
+
+    return plainToInstance(CollectionResponseDto, deleted, {
+      excludeExtraneousValues: true,
+    });
+  } catch (error) {
+    if (error instanceof PrismaClientKnownRequestError) {
+      throw error;
+    }
+    throw new InternalServerErrorException('Erreur lors de la mise à jour de la collection');
+  }
+}
+
 
   async getCollections(): Promise<CollectionResponseDto[]> {
     try {

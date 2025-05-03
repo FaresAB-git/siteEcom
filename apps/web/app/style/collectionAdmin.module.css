@@ -74,3 +74,11 @@
     cursor: pointer;
 }
 
+.delIncon{
+    padding: 10px;
+    color: red;
+}
+
+.delIncon:hover{
+    color: darkred;
+}

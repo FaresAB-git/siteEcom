@@ -17,6 +17,13 @@ export class CollectionController {
 
   // modifier la collection
   @UseGuards(AuthGuard('jwt'))
+  @Delete(':id')
+  async deleteCollection(@Param('id') id: string): Promise<CollectionResponseDto> {
+    const collectId = parseInt(id, 10); // Convertir le paramètre en nombre
+    return this.collectionService.deleteCollection(collectId);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
   @Put(':id')
   async updateCollection(@Param('id') id: string, @Body() collection: CollectionDto): Promise<CollectionResponseDto> {
     const collectId = parseInt(id, 10); // Convertir le paramètre en nombre

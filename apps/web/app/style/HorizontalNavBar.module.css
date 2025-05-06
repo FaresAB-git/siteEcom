@@ -53,3 +53,9 @@
   .nav a:hover::after {
     width: 100%;
   }
+
+  .cartContainer{
+    position: absolute;
+    right: 50px;
+    font-size: larger;
+  }

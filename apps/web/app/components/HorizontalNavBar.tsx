@@ -1,5 +1,7 @@
 import Link from "next/link";
 import styles from "../style/HorizontalNavBar.module.css";
+import Cart from "./Cart";
+
 
 export default function HorizontalNavBar() {
   return (
@@ -12,6 +14,8 @@ export default function HorizontalNavBar() {
         <Link href="/catalogue">Catalogue</Link>
         <Link href="/collections">Collections</Link>
       </nav>
+      <Cart/>
+      
     </header>
   );
 }

@@ -1,4 +1,5 @@
 //composant serveur
+import BtnCart from "../../components/BtnCart";
 import HorizontalNavBar from "../../components/HorizontalNavBar";
 import { getProduct } from "../../services/productServices";
 import style from "../../style/productPage.module.css"
@@ -29,7 +30,7 @@ export default async function ProductPage({ params }: { params: { id: string } }
         <h2 className={style.productPrice}> {product.prix} € </h2>
         <p className={style.productDesc}> {product.description} </p>
         <div> 
-          <button className={style.panierBtn} > ajouter au panier </button> {/* localstore pour panier et faire composant panier */}
+          <BtnCart product={product}/>
         </div>
       </div>
     </div>

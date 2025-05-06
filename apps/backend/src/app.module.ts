@@ -8,10 +8,12 @@ import { UserModule } from './user/user.module';
 import { ProduitModule } from './produit/produit.module';
 import { CollectionModule } from './collection/collection.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
+import { CommandeModule } from './commande/commande.module';
+
 
 
 @Module({
-  imports: [ConfigModule.forRoot({ isGlobal: true }), AuthModule, PrismaModule, UserModule, ProduitModule, CollectionModule, CloudinaryModule],
+  imports: [ConfigModule.forRoot({ isGlobal: true }), AuthModule, PrismaModule, UserModule, ProduitModule, CollectionModule, CloudinaryModule, CommandeModule],
   controllers: [AppController],
   providers: [AppService],
 })

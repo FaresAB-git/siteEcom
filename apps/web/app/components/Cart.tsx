@@ -4,11 +4,13 @@ import { useEffect, useState } from "react";
 import style from "../style/cart.module.css";
 import { FaShoppingCart } from "react-icons/fa";
 import { ProductResponseDto } from "../types/productResponse.dto";
+import { useRouter } from "next/navigation";
 
 
 export default function Cart() {
   const [isOpen, setIsOpen] = useState(false);
   const [cartItems, setCartItems] = useState<ProductResponseDto[]>([]);
+  const router = useRouter();
 
   useEffect(() => {
     const stored = localStorage.getItem("cart");
@@ -53,7 +55,7 @@ const handleRemove = (id: number) => {
             ))}
           </ul>
         )}
-        <button className={style.paymentBtn}> Passer au paiement </button>
+        <button className={style.paymentBtn} onClick={() => router.push("/payment")}> Passer au paiement </button>
       </div>
     </>
   );

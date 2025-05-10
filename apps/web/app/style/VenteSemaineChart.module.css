@@ -1,0 +1,23 @@
+.chartContainer {
+  width: 40%;
+  height: 300px; /* Hauteur du graphique */
+  margin: 20px 0;
+}
+
+.chartTitle {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+@media (max-width: 768px) {
+  .chartContainer {
+    height: 300px;
+  }
+
+  .chartTitle {
+    font-size: 20px;
+    margin-bottom: 15px;
+  }
+}

@@ -4,6 +4,9 @@ import { createProduct } from "../../services/productServices" // Importer la fo
 import { ProdDto } from "../../types/product.dto"; // Assure-toi que ce chemin est correct
 import Header from "../../components/Header";
 import NavBar from "../../components/Navbar";
+import VenteSemaineChart from "../../components/VenteSemaineChart"
+import style from "../../style/homeAdmin.module.css"
+import ChiffreAffaireChart from "../../components/ChiffreAffaireChart";
 
 export default function Home() {
 
@@ -12,7 +15,13 @@ export default function Home() {
       <Header/>
       <NavBar/>
       
-      
+      <div className={style.mainContent}> 
+        <div className={style.container}> 
+          <VenteSemaineChart/>
+          <ChiffreAffaireChart/>
+        </div>
+        
+      </div>
     </>
   );
 }

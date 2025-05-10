@@ -9,11 +9,12 @@ import { ProduitModule } from './produit/produit.module';
 import { CollectionModule } from './collection/collection.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { CommandeModule } from './commande/commande.module';
+import { DashboardModule } from './dashboard/dashboard.module';
 
 
 
 @Module({
-  imports: [ConfigModule.forRoot({ isGlobal: true }), AuthModule, PrismaModule, UserModule, ProduitModule, CollectionModule, CloudinaryModule, CommandeModule],
+  imports: [ConfigModule.forRoot({ isGlobal: true }), AuthModule, PrismaModule, UserModule, ProduitModule, CollectionModule, CloudinaryModule, CommandeModule, DashboardModule],
   controllers: [AppController],
   providers: [AppService],
 })

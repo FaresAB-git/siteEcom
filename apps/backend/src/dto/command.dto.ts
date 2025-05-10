@@ -5,9 +5,8 @@ export class CreateCommandeDto {
   @IsNumber()
   userId?: number;
 
-  @IsOptional()
   @IsString()
-  clientNom?: string;
+  adresse: string;
 
   @IsOptional()
   @IsEmail()

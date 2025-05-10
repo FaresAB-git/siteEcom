@@ -51,8 +51,13 @@ model Commande {
   userId      Int?      // Peut être NULL si l'acheteur n'est pas connecté
   user        User?     @relation(fields: [userId], references: [id], onDelete: Cascade) //permet de faie la jointure facilement dans prisma
 
-  clientNom   String?   // Nom du client si achat sans compte
+
   clientEmail String?   @db.VarChar(255) // Email du client si achat sans compte
+
+  adresse     String   @db.VarChar(255) // Nouvelle adresse du client
+  codePostal  String?   @db.VarChar(20)
+  ville       String?   @db.VarChar(100)
+  pays        String?   @db.VarChar(100)
 
   total       Decimal   @db.Decimal(10,2)
   status      String    @default("en attente") @db.VarChar(50)

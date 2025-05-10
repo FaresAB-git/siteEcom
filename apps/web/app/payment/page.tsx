@@ -35,7 +35,8 @@ export default function CheckoutPage() {
       const dto = {
         commande: {
           clientEmail: email,
-          total,
+          total: parseFloat(total.toFixed(2)),
+          adresse,
           status: 'en attente',
         },
         produits: cart.map((item) => ({
@@ -49,7 +50,7 @@ export default function CheckoutPage() {
       console.log("Commande créée :", result);
 
       localStorage.removeItem('cart');
-      //router.push('/successPayment'); 
+      router.push('/'); 
     } catch (err) {
       console.error("Erreur lors de la création de la commande :", err);
       alert("Une erreur est survenue lors du paiement.");
@@ -84,17 +85,17 @@ export default function CheckoutPage() {
 
         <div className={styles.inputGroup}>
           <label>Numéro de carte bancaire</label>
-          <input type="text" required maxLength={19} placeholder="1234 5678 9012 3456" />
+          <input type="text"  maxLength={19} placeholder="1234 5678 9012 3456" />
         </div>
 
         <div className={styles.row}>
           <div className={styles.inputGroup}>
             <label>Date d'expiration</label>
-            <input type="text" required placeholder="MM/AA" />
+            <input type="text"  placeholder="MM/AA" />
           </div>
           <div className={styles.inputGroup}>
             <label>CVC</label>
-            <input type="text" required maxLength={4} placeholder="123" />
+            <input type="text"  maxLength={4} placeholder="123" />
           </div>
         </div>
 

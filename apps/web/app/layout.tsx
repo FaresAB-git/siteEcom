@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import Header from "./components/Header"
 import { Roboto } from 'next/font/google'
+import { CartProvider } from "./context/CartContext";
  
 // If loading a variable font, you don't need to specify the font weight
 const roboto = Roboto({ subsets: ['latin'] })
@@ -17,7 +18,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={roboto.className}>
-        {children}
+        <CartProvider>
+          {children}
+        </CartProvider>
       </body>
     </html>
   );

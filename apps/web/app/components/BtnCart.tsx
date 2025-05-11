@@ -1,26 +1,19 @@
-'use client'
-import style from "../style/btnCart.module.css"
+'use client';
+
+import style from "../style/btnCart.module.css";
 import { ProductResponseDto } from "../types/productResponse.dto";
+import { useCart } from "../context/CartContext"
 
 type BtnCartProps = {
-    product: ProductResponseDto;
-  };
+  product: ProductResponseDto;
+};
 
- export default function BtnCart({ product }: BtnCartProps) {
+export default function BtnCart({ product }: BtnCartProps) {
+  const { addToCart } = useCart();
 
-    function addToCart() {
-        const cartString = localStorage.getItem("cart");
-        const cart = cartString ? JSON.parse(cartString) : [];
-    
-        cart.push(product);
-        localStorage.setItem("cart", JSON.stringify(cart));
-        
-      }
-  return(
-    
-    <>
-    <button className={style.panierBtn} onClick={addToCart}> Ajouter au panier </button>
-    </>
-  ); 
-
+  return (
+    <button className={style.panierBtn} onClick={() => addToCart(product)}>
+      Ajouter au panier
+    </button>
+  );
 }

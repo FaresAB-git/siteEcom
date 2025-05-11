@@ -2,6 +2,8 @@
   width: 40%;
   height: 300px; /* Hauteur du graphique */
   margin: 20px 0;
+  background: whitesmoke;
+  padding: 20px;
 }
 
 .chartTitle {

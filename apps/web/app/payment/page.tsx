@@ -5,27 +5,38 @@ import styles from "../style/payment.module.css";
 import { ProductResponseDto } from '../types/productResponse.dto';
 import { useRouter } from 'next/navigation';
 import { createCommande } from '../services/commandServices';
+import { useCart } from '../context/CartContext';
+
+
+type CartItem = {
+  product: ProductResponseDto;
+  quantity: number;
+};
 
 export default function CheckoutPage() {
-  const [cart, setCart] = useState<ProductResponseDto[]>([]);
+  const [cart, setCart] = useState<CartItem[]>([]);
   const [email, setEmail] = useState('');
   const [adresse, setAdresse] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
+  const { clearCart } = useCart();
+
 
   useEffect(() => {
     const cartData = localStorage.getItem('cart');
     if (cartData) {
       try {
-        const parsedCart: ProductResponseDto[] = JSON.parse(cartData);
-        setCart(parsedCart);
+        const parsedCart: CartItem[] = JSON.parse(cartData);
+        // filtre défensif
+        const validCart = parsedCart.filter(item => item?.product && item?.quantity);
+        setCart(validCart);
       } catch (err) {
         console.error("Erreur lors du parsing du panier:", err);
       }
     }
   }, []);
 
-  const total = cart.reduce((sum, item) => sum + item.prix, 0);
+  const total = cart.reduce((sum, item) => sum + item.product.prix * item.quantity, 0);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,16 +51,16 @@ export default function CheckoutPage() {
           status: 'en attente',
         },
         produits: cart.map((item) => ({
-          produitId: item.id,
-          quantite: 1, // à adapter si tu gères la quantité ailleurs
-          prixUnitaire: item.prix,
+          produitId: item.product.id,
+          quantite: item.quantity,
+          prixUnitaire: item.product.prix,
         })),
       };
 
       const result = await createCommande(dto);
       console.log("Commande créée :", result);
 
-      localStorage.removeItem('cart');
+      clearCart(); 
       router.push('/'); 
     } catch (err) {
       console.error("Erreur lors de la création de la commande :", err);
@@ -85,17 +96,17 @@ export default function CheckoutPage() {
 
         <div className={styles.inputGroup}>
           <label>Numéro de carte bancaire</label>
-          <input type="text"  maxLength={19} placeholder="1234 5678 9012 3456" />
+          <input type="text" maxLength={19} placeholder="1234 5678 9012 3456" />
         </div>
 
         <div className={styles.row}>
           <div className={styles.inputGroup}>
             <label>Date d'expiration</label>
-            <input type="text"  placeholder="MM/AA" />
+            <input type="text" placeholder="MM/AA" />
           </div>
           <div className={styles.inputGroup}>
             <label>CVC</label>
-            <input type="text"  maxLength={4} placeholder="123" />
+            <input type="text" maxLength={4} placeholder="123" />
           </div>
         </div>
 
@@ -110,14 +121,15 @@ export default function CheckoutPage() {
           <p>Votre panier est vide.</p>
         ) : (
           <ul className={styles.cartList}>
-            {cart.map((product) => (
+            {cart.map(({ product, quantity }) => (
               <li key={product.id} className={styles.cartItem}>
                 <img src={product.imgPath} className={styles.productSummaryImg} />
                 <div>
                   <p className={styles.productName}>{product.nom}</p>
                   <p className={styles.productDesc}>{product.description}</p>
+                  <p>Quantité : {quantity}</p>
                 </div>
-                <span>{product.prix.toFixed(2)} €</span>
+                <span>{(product.prix * quantity).toFixed(2)} €</span>
               </li>
             ))}
           </ul>

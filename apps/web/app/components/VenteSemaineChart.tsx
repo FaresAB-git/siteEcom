@@ -8,6 +8,7 @@ import {
   YAxis,
   Tooltip,
   CartesianGrid,
+  AreaChart,
   ResponsiveContainer,
 } from 'recharts';
 import style from "../style/VenteSemaineChart.module.css";  // Import du CSS module

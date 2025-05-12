@@ -20,7 +20,7 @@ export default function Home() {
       const token = await loginAdmin(email, password); 
       console.log(token);
       console.log("Connexion réussie !");
-      router.push('/admin/homeAdmin');
+      router.push('/admin/');
 
     } catch (error: unknown) {
       console.error("Erreur de connexion :", error);

@@ -11,7 +11,7 @@ import { IoMdHome } from "react-icons/io";
     <>
         <div className={style.container}>
             <div className={style.linkContainer}> 
-                <Link href="/admin/homeAdmin" className={style.navLink}>
+                <Link href="/admin" className={style.navLink}>
                   <div className={style.iconContainer}>
                     <IoMdHome style={{ fontSize: "1.3rem" }}/>
                   </div> 
@@ -31,7 +31,7 @@ import { IoMdHome } from "react-icons/io";
                   <span className={style.linkText}> Collection </span> 
                 </Link>
 
-                <Link href="" className={style.navLink}>
+                <Link href="/admin/stock" className={style.navLink}>
                   <div className={style.iconContainer}>
                     <FaWarehouse />
                   </div> 

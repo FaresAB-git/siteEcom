@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
 // Liste des routes protégées
-const protectedRoutes = ['/admin/homeAdmin']
+const protectedRoutes = ['/admin','/admin/collection', '/admin/product','/admin/command', '/admin/stock']
 
 export function middleware(request: NextRequest) {
   console.log('middleware');

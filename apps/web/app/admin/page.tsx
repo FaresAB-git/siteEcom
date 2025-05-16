@@ -7,6 +7,8 @@ import NavBar from "../components/Navbar";
 import VenteSemaineChart from "../components/VenteSemaineChart"
 import style from "../style/homeAdmin.module.css"
 import ChiffreAffaireChart from "../components/ChiffreAffaireChart";
+import StockForecast from "../components/StockForecastBarchart";
+
 
 export default function Home() {
 
@@ -17,8 +19,12 @@ export default function Home() {
       
       <div className={style.mainContent}> 
         <div className={style.container}> 
-          <VenteSemaineChart/>
-          <ChiffreAffaireChart/>
+          <div className={style.chartContainer}>
+            <VenteSemaineChart/>
+            <ChiffreAffaireChart/>
+            <StockForecast/>
+          </div>
+          
         </div>
         
       </div>

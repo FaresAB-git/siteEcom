@@ -7,11 +7,14 @@ import style from "../../style/productAdmin.module.css";
 import Link from "next/link";
 import { ProductResponseDto } from "../../types/productResponse.dto";
 import { useRouter } from "next/navigation";
+import { getPrevisionStock } from "../../services/dashboardServices";
+
 
 export default function Home() {
   const router = useRouter();
   const [products, setProducts] = useState<ProductResponseDto[]>([]);
   const [modifiedStocks, setModifiedStocks] = useState<{ [key: number]: number }>({});
+  const [stockForecast, setStockForecast] = useState<{ [key: number]: number }>({});
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -23,7 +26,22 @@ export default function Home() {
         setError(err.message);
       }
     };
+
+    const fetchForecast = async () => {
+      try {
+        const forecasts = await getPrevisionStock();
+        const forecastMap: { [key: number]: number } = {};
+        forecasts.forEach((item: any) => {
+          forecastMap[item.id] = item.joursRestants;
+        });
+        setStockForecast(forecastMap);
+      } catch (err: any) {
+        console.error("Erreur de prévision de stock :", err);
+      }
+    };
+
     fetchProducts();
+    fetchForecast();
   }, []);
 
   const handleStockChange = (id: number, newStock: number) => {
@@ -31,28 +49,47 @@ export default function Home() {
   };
 
   const handleSave = async (product: ProductResponseDto) => {
-  const newStock = modifiedStocks[product.id];
-  if (newStock === undefined) return; // sécurité : ne rien faire si pas de modif
+    const newStock = modifiedStocks[product.id];
+    if (newStock === undefined) return;
 
-  try {
-    await updateProduct(product.id, { ...product, stock: newStock }, null);
+    try {
+      await updateProduct(product.id, { ...product, stock: newStock }, null);
+      setProducts((prev) =>
+        prev.map((p) =>
+          p.id === product.id ? { ...p, stock: newStock } : p
+        )
+      );
+      setModifiedStocks((prev) => {
+        const updated = { ...prev };
+        delete updated[product.id];
+        return updated;
+      });
+    } catch (err: any) {
+      setError(err.message);
+    }
+  };
 
-    setProducts((prev) =>
-      prev.map((p) =>
-        p.id === product.id ? { ...p, stock: newStock as number } : p
-      )
+  const renderStockStatus = (joursRestants: number | undefined) => {
+    if (joursRestants === undefined) return null;
+    let color = "gray";
+    if (joursRestants <= 7) color = "red";
+    else if (joursRestants <= 30) color = "orange";
+    else color = "green";
+
+    return (
+      <span
+        title={`${joursRestants === Infinity ? "Stock stable" : joursRestants + "j restants"}`}
+        style={{
+          display: "inline-block",
+          width: 12,
+          height: 12,
+          borderRadius: "50%",
+          backgroundColor: color,
+          margin: "0 auto",
+        }}
+      ></span>
     );
-
-    setModifiedStocks((prev) => {
-      const updated = { ...prev };
-      delete updated[product.id];
-      return updated;
-    });
-  } catch (err: any) {
-    setError(err.message);
-  }
-};
-
+  };
 
   return (
     <>
@@ -68,6 +105,7 @@ export default function Home() {
                   <th className={style.tableCell}>Produit</th>
                   <th className={style.tableCell}>Image</th>
                   <th className={style.tableCell}>Stock</th>
+                  <th className={style.tableCell}>Prévision</th>
                   <th className={style.tableCell}>Action</th>
                 </tr>
               </thead>
@@ -86,6 +124,9 @@ export default function Home() {
                           handleStockChange(product.id, parseInt(e.target.value))
                         }
                       />
+                    </td>
+                    <td className={`${style.tableCell} ${style.rowBorder}`}>
+                      {renderStockStatus(stockForecast[product.id])}
                     </td>
                     <td className={`${style.tableCell} ${style.rowBorder}`}>
                       {modifiedStocks[product.id] !== undefined &&

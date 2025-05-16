@@ -31,3 +31,20 @@ export async function getChiffreAfaireSemaine(){
 
     return data
 }
+
+export async function getPrevisionStock(){
+    const response = await fetch("http://localhost:8000/dashboard/previsionStock",{
+        method:'GET',
+        headers:{
+            'Content-Type': 'application/json',
+        }
+    });
+
+    const data = await response.json();
+    console.log(data);
+    if(!response.ok){
+        throw new Error (data.message || 'erreur de connexion');
+    }
+
+    return data
+}

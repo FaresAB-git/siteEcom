@@ -9,9 +9,14 @@ export class DashboardController {
   async getVenteSemaine(){
     return this.dashboardService.getVenteSemaine();
   }
-
+  
   @Get("/chiffreAffaireSemaine")
   async getChiffreAfaireSemaine(){
     return this.dashboardService.getChiffreAffairesSemaine();
+  }
+
+  @Get("/previsionStock")
+  async getPrevisionStock(){
+    return this.dashboardService.getStockForecast()
   }
 }

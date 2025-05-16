@@ -88,4 +88,40 @@ export class DashboardService {
 
     return result;
   }
+
+  async getStockForecast() {
+    const sevenDaysAgo = subDays(new Date(), 7);
+
+    // Récupère tous les produits avec leurs ventes dans les 7 derniers jours
+    const products = await this.prisma.produit.findMany({
+      include: {
+        commandes: {
+          where: {
+            commande: {
+              createdAt: {
+                gte: sevenDaysAgo,
+              },
+            },
+          },
+          select: {
+            quantite: true,
+          },
+        },
+      },
+    });
+
+    return products.map((product) => {
+      const totalSales = product.commandes.reduce((sum, c) => sum + c.quantite, 0);
+      const dailySales = totalSales / 7;
+      const joursRestants = dailySales > 0 ? Math.floor(product.stock / dailySales) : Infinity;  //infinity si il n'y a pas de commande et que le stock ne diminue jamais
+
+      return {
+        id: product.id,
+        nom: product.nom,
+        stock: product.stock,
+        ventes7j: totalSales,
+        joursRestants,
+      };
+    });
+  }
 }

@@ -12,3 +12,9 @@
     padding: 20px;
     height: 100%;
 }
+
+.chartContainer{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}

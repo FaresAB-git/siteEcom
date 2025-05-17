@@ -24,7 +24,7 @@ export default function HorizontalNavBar() {
   return (
     <header className={styles.header}>
       <div className={styles.logo}>
-        <Link href="/">MonLogo</Link>
+        <Link href="/">E-PERIF</Link>
       </div>
 
       <nav className={styles.nav}>

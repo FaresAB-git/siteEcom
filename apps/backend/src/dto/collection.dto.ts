@@ -11,4 +11,8 @@ export class CollectionDto {  //class et non interface pour utiliser les decorat
     @IsOptional()
     description?: string;
 
+    @IsString()
+    @IsOptional()
+    imgPath?: string;
+
 }

@@ -23,6 +23,8 @@ export default function ProductGallery() {
     }, []);
 
     return (
+        <>
+        <h2 className={style.productGalleryTitle}> Tous les produits</h2>
         <div className={style.galleryContainer}>
             {products.map((product, index) => (
                 <div key={index} className={style.productCard} onClick={ () => {router.push("/productPage/" + product.id)}}>
@@ -41,5 +43,7 @@ export default function ProductGallery() {
                 </div>
             ))}
         </div>
+        </>
     );
+    
 }

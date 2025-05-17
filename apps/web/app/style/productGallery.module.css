@@ -8,6 +8,11 @@
   gap: 1rem;
   grid-row-gap: 3rem; /* Espacement spécifique entre les lignes */
   padding: 1rem;
+  
+  margin-bottom: 100px;
+}
+.productGalleryTitle{
+  margin-left: 20%;
   margin-top: 100px;
 }
   

@@ -24,8 +24,8 @@ export async function createProduct(product: ProdDto, imageFile: File|null) {
   if (!imageFile) throw new Error("Image manquante pour la création du produit.");
   
   const formData = new FormData();
-  formData.append('file', imageFile);  // "file" doit correspondre au champ du formulaire dans ta route
-  formData.append('upload_preset', 'votre_upload_preset');  // Si nécessaire, ajoute un upload preset (selon la config Cloudinary)
+  formData.append('file', imageFile);  
+  formData.append('upload_preset', 'votre_upload_preset');  
 
   const uploadRes = await fetch("http://localhost:8000/upload", {
       method: 'POST',
@@ -40,10 +40,10 @@ export async function createProduct(product: ProdDto, imageFile: File|null) {
   const uploadData = await uploadRes.json();
   const imageUrl = uploadData.url;  // URL de l'image retournée par Cloudinary
 
-  // Étape 2: Ajouter l'URL de l'image dans le produit
+  //Ajouter l'URL de l'image dans le produit
   const productWithImage = { ...product, imgPath: imageUrl };
 
-  // Étape 3: Création du produit avec l'URL de l'image
+  //Création du produit avec l'URL de l'image
   const res = await fetch("http://localhost:8000/produit", {
       method: 'POST',
       credentials: 'include',
@@ -134,4 +134,26 @@ export async function updateProduct(id: number, product: ProdDto, imageFile: Fil
   }
 
   return res.json();
+}
+
+
+export async function uploadImg(imgFile: File): Promise<string>{
+  const formData = new FormData();
+  formData.append('file', imgFile);
+
+  const uploadRes = await fetch("http://localhost:8000/upload", {
+      method: 'POST',
+      body: formData,
+    });
+
+    if (!uploadRes.ok) {
+      const error = await uploadRes.json();
+      throw new Error(error.message || 'Erreur lors de l\'upload de la nouvelle image');
+    }
+
+    const uploadData = await uploadRes.json();
+    const imageUrl = uploadData.url;  // URL de l'image retournée par Cloudinary
+  
+    return imageUrl
+
 }

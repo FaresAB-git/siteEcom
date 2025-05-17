@@ -12,5 +12,8 @@ export class CollectionResponseDto {
   description: string | null;
 
   @Expose()
+  imgPath: string | null;
+
+  @Expose()
   createdAt: Date;
 }

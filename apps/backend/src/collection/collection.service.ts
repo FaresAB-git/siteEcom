@@ -22,6 +22,7 @@ export class CollectionService {
         data: {
           nom: collection.nom,
           description: collection.description,
+          imgPath: collection.imgPath
         },
       });
       return plainToInstance(CollectionResponseDto, collect, {excludeExtraneousValues: true,});
@@ -41,6 +42,7 @@ async updateCollection(id: number, collection: CollectionDto): Promise<Collectio
       data: {
         nom: collection.nom,
         description: collection.description,
+        imgPath:collection.imgPath
       },
     });
 

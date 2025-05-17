@@ -4,7 +4,7 @@ import style from "../style/createCollection.module.css";
 import { CollectionResponseDto } from "../types/collection.dto";
 import { addProductsToCollection, createCollection, getCollection, getCollections, getProductsFromCollection, updateCollection, updateProducts } from "../services/collectionServices";
 import { ProductResponseDto } from "../types/productResponse.dto";
-import { getProducts, updateProduct } from "../services/productServices";
+import { getProducts, updateProduct, uploadImg } from "../services/productServices";
 import { useRouter } from "next/navigation";
 
 type CollectionFormProps = {
@@ -20,6 +20,7 @@ export default function CollectionForm({ mode, collectionToEditId }: CollectionF
   const [allProducts, setAllProducts] = useState<ProductResponseDto[]>([]);
   const [selectedProductIds, setSelectedProductIds] = useState<number[]>([]);
   const [checkedProductIds, setCheckedProductIds] = useState<number[]>([]); // Liste des IDs sélectionnés dans le modal
+  const [image, setImage] = useState<File | null>(null);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -40,11 +41,11 @@ export default function CollectionForm({ mode, collectionToEditId }: CollectionF
 
       if(mode == 'edit' && collectionToEditId){
         try {
-          //TO-DO faire la route backend pour recup les info d'une collection et mettree le titre et la description
+          
           const collection = await getCollection(collectionToEditId);
           setDescription(collection.description);
           setTitre(collection.nom);
-          //const collectionInfo = await getCo
+      
           const productsFromCollection  = await getProductsFromCollection(collectionToEditId)
           // Extraire les IDs des produits récupérés
           const productIds = productsFromCollection.map((product: ProductResponseDto) => product.id);
@@ -67,13 +68,19 @@ export default function CollectionForm({ mode, collectionToEditId }: CollectionF
 
     
     try {
+      let imgPath: string | undefined;
+      if(image){
+        imgPath = await uploadImg(image);
+      }
       if(mode == 'create'){
-        const collection = await createCollection({nom: titre, description});
+        
+        const collection = await createCollection({nom: titre, description, imgPath});
         console.log(collection);
         await addProductsToCollection(collection.id, selectedProductIds);
+  
       }
       else if(mode == 'edit' && collectionToEditId){
-        const collection = await updateCollection(collectionToEditId, {nom: titre, description});
+        const collection = await updateCollection(collectionToEditId, {nom: titre, description, imgPath});
         await updateProducts(collectionToEditId, selectedProductIds); 
         console.log('collection modifier');
       }
@@ -109,7 +116,8 @@ export default function CollectionForm({ mode, collectionToEditId }: CollectionF
           <input type="text" className={style.input} value={titre} onChange={(e) => setTitre(e.target.value)} />
           <label>Description</label>
           <textarea rows={6} className={style.descInput} value={description} onChange={(e) => setDescription(e.target.value)} />
-
+          <label>Image</label>
+          <input type="file" className={style.imgInput} onChange={(e) => setImage(e.target.files?.[0] || null)} />
           <button type="button" className={style.openModalButton} onClick={toggleModal}>
             Sélectionner les produits
           </button>

@@ -7,7 +7,6 @@ import { useRouter } from 'next/navigation';
 import { createCommande } from '../services/commandServices';
 import { useCart } from '../context/CartContext';
 
-
 type CartItem = {
   product: ProductResponseDto;
   quantity: number;
@@ -16,18 +15,18 @@ type CartItem = {
 export default function CheckoutPage() {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [email, setEmail] = useState('');
-  const [adresse, setAdresse] = useState('');
+  const [rue, setRue] = useState('');
+  const [codePostal, setCodePostal] = useState('');
+  const [ville, setVille] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
   const { clearCart } = useCart();
-
 
   useEffect(() => {
     const cartData = localStorage.getItem('cart');
     if (cartData) {
       try {
         const parsedCart: CartItem[] = JSON.parse(cartData);
-        // filtre défensif
         const validCart = parsedCart.filter(item => item?.product && item?.quantity);
         setCart(validCart);
       } catch (err) {
@@ -41,6 +40,8 @@ export default function CheckoutPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+
+    const adresse = `${rue.trim()} ${codePostal.trim()} ${ville.trim()}`;
 
     try {
       const dto = {
@@ -60,8 +61,8 @@ export default function CheckoutPage() {
       const result = await createCommande(dto);
       console.log("Commande créée :", result);
 
-      clearCart(); 
-      router.push('/'); 
+      clearCart();
+      router.push('/');
     } catch (err) {
       console.error("Erreur lors de la création de la commande :", err);
       alert("Une erreur est survenue lors du paiement.");
@@ -86,14 +87,27 @@ export default function CheckoutPage() {
         </div>
 
         <div className={styles.inputGroup}>
-          <label>Adresse postale</label>
-          <textarea
+          <label>Rue</label>
+          <input
+            type="text"
             required
-            value={adresse}
-            onChange={(e) => setAdresse(e.target.value)}
-          ></textarea>
+            value={rue}
+            onChange={(e) => setRue(e.target.value)}
+            placeholder="Ex: 26 bis avenue de Loverchy"
+          />
         </div>
 
+        <div className={styles.row}>
+          <div className={styles.inputGroup} style={{ flex: 1 }}>
+            <label>Code postal</label>
+            <input type="text" placeholder="75000" />
+          </div>
+          <div className={styles.inputGroup} style={{ flex: 1 }}>
+            <label>Ville</label>
+            <input type="text" placeholder="Paris" />
+          </div>
+        </div>
+        
         <div className={styles.inputGroup}>
           <label>Numéro de carte bancaire</label>
           <input type="text" maxLength={19} placeholder="1234 5678 9012 3456" />

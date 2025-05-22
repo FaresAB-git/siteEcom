@@ -19,14 +19,23 @@ export default function CollectionCarousel(){
       }, []);
     return(
         <>
+        <h2 className={style.collectionTitle}> COLLECTIONS </h2>
         <div className={style.carousselContainer}>
-            {collections.map((collection, index) => (
-                <div className={style.collectionContainer} key={index}>
-                    <img src={collection.imgPath}  className={style.imgCollection}/>
-                    <span> {collection.nom} </span>
-                </div>
-            ))}
+        {collections.map((collection, index) => {
+            const transformedUrl = collection.imgPath?.replace(
+            '/upload/',
+            '/upload/w_900,h_600,c_fill,g_auto,f_auto,q_auto/'
+            );
+
+            return (
+            <div className={style.collectionContainer} key={index}>
+                <img src={transformedUrl} className={style.imgCollection} />
+                <span className={style.collectionLink}>  {collection.nom}</span>
+            </div>
+            );
+        })}
         </div>
+
         </>
     );
 }

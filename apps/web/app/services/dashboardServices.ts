@@ -48,3 +48,4 @@ export async function getPrevisionStock(){
 
     return data
 }
+

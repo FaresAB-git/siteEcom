@@ -18,7 +18,7 @@ export default function CollectionCarousel(){
         
       }, []);
     return(
-        <>
+        <div className={style.container}>
         <h2 className={style.collectionTitle}> COLLECTIONS </h2>
         <div className={style.carousselContainer}>
         {collections.map((collection, index) => {
@@ -36,6 +36,6 @@ export default function CollectionCarousel(){
         })}
         </div>
 
-        </>
+        </div>
     );
 }

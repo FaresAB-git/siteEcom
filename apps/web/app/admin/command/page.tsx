@@ -31,7 +31,7 @@ export default function Commands(){
             setCommands(commands);
         }
         fetchComands();
-    },[]);
+    },[]); 
 
     return(
         <>

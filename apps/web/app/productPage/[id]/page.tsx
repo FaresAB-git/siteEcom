@@ -5,7 +5,9 @@ import { getProduct } from "../../services/productServices";
 import style from "../../style/productPage.module.css"
 import { ProductResponseDto } from "../../types/productResponse.dto";
 
-export default async function ProductPage({ params }: { params: { id: string } }) { 
+type Params = Promise<{ id: string }>
+
+export default async function ProductPage({params}: { params: Params }) { 
  
   const resolvedParams = await params;
 

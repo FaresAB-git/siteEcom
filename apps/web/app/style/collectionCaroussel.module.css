@@ -1,3 +1,10 @@
+.container {
+  position: relative;
+  width: 90%;
+  margin: auto;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
 .carousselContainer {
   display: flex;
   justify-content: center;
@@ -11,6 +18,7 @@
   width: 100px;
   margin-top: 50px;
   margin-bottom: 50px;
+  padding-top: 30px;
 }
 
 .collectionContainer {

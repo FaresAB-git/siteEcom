@@ -41,8 +41,8 @@ export default function ProductGallery({ filter = false }: ProductGalleryProps) 
     });
 
     return (
-        <>
-            <h2 className={style.productGalleryTitle}>Tous les produits</h2>
+        <div className={style.container}>
+            <h2 className={style.productGalleryTitle}>TOUT LES PRODUITS</h2>
 
             {filter && (
                 <div className={style.filterBar}>
@@ -89,6 +89,6 @@ export default function ProductGallery({ filter = false }: ProductGalleryProps) 
                     </div>
                 ))}
             </div>
-        </>
+        </div>
     );
 }

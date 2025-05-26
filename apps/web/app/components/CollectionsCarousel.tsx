@@ -2,12 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { getCollections } from "../services/collectionServices";
-import { CollectionDto } from "../types/collection.dto";
+import { CollectionDto, CollectionResponseDto } from "../types/collection.dto";
 import style from "../style/collectionCaroussel.module.css"
+import { useRouter } from "next/navigation";
 
 export default function CollectionCarousel(){
 
-    const [collections, setCollections] = useState<CollectionDto[]>([]);
+    const [collections, setCollections] = useState<CollectionResponseDto[]>([]);
+    const router = useRouter();
 
     useEffect(() => {
         const fetchCollections = async () => {
@@ -30,7 +32,7 @@ export default function CollectionCarousel(){
             return (
             <div className={style.collectionContainer} key={index}>
                 <img src={transformedUrl} className={style.imgCollection} />
-                <span className={style.collectionLink}>  {collection.nom}</span>
+                <span className={style.collectionLink} onClick={() => router.push('/collectionProducts/' + collection.id)}>  {collection.nom}</span>
             </div>
             );
         })}

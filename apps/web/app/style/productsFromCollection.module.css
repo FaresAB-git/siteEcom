@@ -3,8 +3,10 @@
   position: relative;
   width: 90%;
   margin: auto;
+  margin-top:100px ;
   background-color: white;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  padding-bottom: 20px;
 }
 
 .galleryContainer {
@@ -23,6 +25,7 @@
   margin:auto;
   width: fit-content;
   margin-top: 100px;
+  margin-bottom: 10px;
 }
   
 .productCard {

@@ -22,6 +22,7 @@ export class CommandeService {
       // Création de la commande
       const createdCommande = await this.prisma.commande.create({
         data: {
+          userId: commande.userId ?? undefined,
           clientEmail: commande.clientEmail,
           total: commande.total,
           status: commande.status ?? 'en attente',

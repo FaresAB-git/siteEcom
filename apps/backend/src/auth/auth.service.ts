@@ -39,23 +39,58 @@ export class AuthService {
     }
   }
 
-  async login(dto: AuthDto) {
+async login(dto: AuthDto) {
     const user = await this.prisma.user.findUnique({
-        where: { email: dto.email },
+      where: { email: dto.email },
+      include: {
+        commandes: {
+          include: {
+            produits: {
+              include: {
+                produit: true, // Inclut les infos du produit commandé
+              },
+            },
+          },
+        },
+      },
     });
 
     if (!user) {
-        throw new ForbiddenException('email incorrect');
+      throw new ForbiddenException('email incorrect');
     }
-
 
     const passwordMatch = await argon.verify(user.password, dto.password);
     if (!passwordMatch) {
-        throw new ForbiddenException('mot de passe incorrect');
+      throw new ForbiddenException('mot de passe incorrect');
     }
-   
-    return this.signToken(user.id, user.email);
-}
+
+    const token = await this.signToken(user.id, user.email);
+
+    return {
+      access_token: token.access_token,
+      user: {
+        id: user.id,
+        email: user.email,
+        role: user.role,
+        commandes: user.commandes.map((commande) => ({
+          id: commande.id,
+          adresse: commande.adresse,
+          codePostal: commande.codePostal,
+          ville: commande.ville,
+          pays: commande.pays,
+          total: commande.total,
+          status: commande.status,
+          createdAt: commande.createdAt,
+          produits: commande.produits.map((cp) => ({
+            quantite: cp.quantite,
+            prixUnitaire: cp.prixUnitaire,
+            produit: cp.produit,
+          })),
+        })),
+      },
+    };
+  }
+
 
 async loginAdmin(dto: AuthDto) {
   const user = await this.prisma.user.findUnique({
@@ -98,5 +133,7 @@ async signToken(userId: number, email: string):Promise<{access_token: string}>{
   };
   
 }
+
+
 
 }

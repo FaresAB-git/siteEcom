@@ -42,10 +42,15 @@ export default function CheckoutPage() {
     setIsSubmitting(true);
 
     const adresse = `${rue.trim()} ${codePostal.trim()} ${ville.trim()}`;
+    const user = localStorage.getItem("user"); //retourne l'objet en string
+    console.log(user);
+    const userId = user ? JSON.parse(user).id : null  //recupere l'id
+    console.log(userId);
 
     try {
       const dto = {
         commande: {
+          userId: userId,
           clientEmail: email,
           total: parseFloat(total.toFixed(2)),
           adresse,
@@ -62,7 +67,7 @@ export default function CheckoutPage() {
       console.log("Commande créée :", result);
 
       clearCart();
-      router.push('/');
+      //router.push('/');
     } catch (err) {
       console.error("Erreur lors de la création de la commande :", err);
       alert("Une erreur est survenue lors du paiement.");

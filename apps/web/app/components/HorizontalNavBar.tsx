@@ -9,7 +9,8 @@ import { useRouter } from "next/navigation";
 
 export default function HorizontalNavBar() {
   const [collections, setCollections] = useState<CollectionResponseDto[]>([]);
-  const [hoveredCollection, setHoveredCollection] = useState<string | null>(null);
+  const [showDropdown, setShowDropdown] = useState(false);
+
   const router = useRouter();
 
   useEffect(() => {
@@ -18,9 +19,8 @@ export default function HorizontalNavBar() {
       setCollections(fetchedCollections);
     };
     fetchCollections();
-    
   }, []);
-  console.log(collections);
+
   return (
     <header className={styles.header}>
       <div className={styles.logo}>
@@ -30,30 +30,25 @@ export default function HorizontalNavBar() {
       <nav className={styles.nav}>
         <Link href="/">Accueil</Link>
         <Link href="/catalogue">Catalogue</Link>
-
-        <div
-          className={styles.collectionsContainer}
-          onMouseLeave={() => setHoveredCollection(null)}
-        >
-          <Link href="/collections">Collections</Link>
-          <div className={styles.dropdown}>
-            {collections.map((collection, index) => (
-              <div
-              key={index}
-              onMouseEnter={() => setHoveredCollection(collection.nom)}
-              className={styles.collectionItem}
-              onClick={() => router.push(`/collectionProducts/${collection.id}`)}
-            >
-              {collection.nom}
-            </div>
-            
-            ))}
-          </div>
-        </div>
+        <Link href="/collections" onMouseEnter={() => setShowDropdown(true)}>Collections</Link>
       </nav>
-     
+      {showDropdown && (
+            <div className={styles.dropdown} onMouseLeave={() => setShowDropdown(false)}>
+              {collections.map((collection) => (
+                <Link
+                  key={collection.id}
+                  href={"/collectionProducts/" + collection.id}
+                  className={styles.collectionLink}
+                >
+                  {collection.nom}
+                </Link>
+              ))}
+            </div>
+          )}
 
-      <Cart />
+      <div className={styles.cartContainer}>
+        <Cart />
+      </div>
     </header>
   );
 }

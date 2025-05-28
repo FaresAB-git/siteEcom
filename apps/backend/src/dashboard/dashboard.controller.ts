@@ -19,4 +19,13 @@ export class DashboardController {
   async getPrevisionStock(){
     return this.dashboardService.getStockForecast()
   }
+
+  @Get("/previsionStockSES")
+  async getPrevisionStockMA(){
+    return this.dashboardService.getStockForecastSES()
+  }
+
+  
+  
+
 }

@@ -49,7 +49,7 @@ export class DashboardService {
 
   async getChiffreAffairesSemaine() {
     const today = new Date();
-    const startDate = subDays(today, 6); // 7 jours glissants
+    const startDate = subDays(today, 6); 
 
     // Récupérer toutes les commandes dans l'intervalle
     const commandes = await this.prisma.commande.findMany({
@@ -123,5 +123,74 @@ export class DashboardService {
         joursRestants,
       };
     });
+  }
+
+
+  //Simple Exponential Smoothing (SES) 
+  async getStockForecastSES(alpha = 0.3) {
+    const sevenDaysAgo = subDays(new Date(), 7);
+
+    // Récupère les produits et leurs commandes des 7 derniers jours
+    const products = await this.prisma.produit.findMany({
+      include: {
+        commandes: {
+          where: {
+            commande: {
+              createdAt: {
+                gte: sevenDaysAgo,
+              },
+            },
+          },
+          select: {
+            quantite: true,
+            commande: {
+              select: {
+                createdAt: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    return products.map((product) => {
+
+      const ventesParJour: Record<string, number> = {}; //dictionnaire avec toute les dates
+      for (let i = 0; i < 7; i++) {
+        const day = format(subDays(new Date(), i), 'MM-dd'); // format MM-DD
+        ventesParJour[day] = 0;
+      }
+      //console.log(ventesParJour);
+
+      product.commandes.forEach((c) => {
+        const day = format(new Date(c.commande.createdAt), 'MM-dd'); //recupere la date de la commande
+        if (ventesParJour[day] !== undefined) {       // verifie que la date de la commande est parmis les 7 derniers jour
+          ventesParJour[day] += c.quantite;           //si oui on ajoute la quantité
+        }
+      })
+
+      // 2) Trier les jours du plus ancien au plus récent
+      const ventesOrdonnees = Object.keys(ventesParJour)
+        .sort()
+        .map((day) => ventesParJour[day]);
+      console.log(ventesOrdonnees) //liste des ventes par jour dans l'ordre
+
+      let forecast = ventesOrdonnees[0]; // Initialisation F₁ = D₁
+      for (let i = 1; i < ventesOrdonnees.length; i++) {
+        forecast = alpha * ventesOrdonnees[i] + (1 - alpha) * forecast; //formule SES
+      }
+
+      // 4) Calcul des jours restants
+      const joursRestants = forecast > 0 ? Math.floor(product.stock / forecast) : Infinity;
+
+      return {
+        id: product.id,
+        nom: product.nom,
+        stock: product.stock,
+        ventes7j: ventesOrdonnees.reduce((a, b) => a + b, 0), //vente totales sur les 7 jours
+        forecastDemandeProchainJour: forecast,
+        joursRestants,
+      };
+    })
   }
 }

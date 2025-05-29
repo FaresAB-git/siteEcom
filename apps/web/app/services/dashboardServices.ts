@@ -49,3 +49,37 @@ export async function getPrevisionStock(){
     return data
 }
 
+export async function getPrevisionStockSES(){
+    const response = await fetch("http://localhost:8000/dashboard/previsionStockSES",{
+        method:'GET',
+        headers:{
+            'Content-Type': 'application/json',
+        }
+    });
+
+    const data = await response.json();
+    console.log(data);
+    if(!response.ok){
+        throw new Error (data.message || 'erreur de connexion');
+    }
+
+    return data
+}
+
+export async function getPrevisionStockDES(){
+    const response = await fetch("http://localhost:8000/dashboard/previsionStockDES",{
+        method:'GET',
+        headers:{
+            'Content-Type': 'application/json',
+        }
+    });
+
+    const data = await response.json();
+    console.log(data);
+    if(!response.ok){
+        throw new Error (data.message || 'erreur de connexion');
+    }
+
+    return data
+}
+

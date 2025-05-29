@@ -1,5 +1,5 @@
 'use client';
-import { getPrevisionStock } from '../services/dashboardServices';
+import { getPrevisionStock, getPrevisionStockDES, getPrevisionStockSES } from '../services/dashboardServices';
 import { useEffect, useState } from 'react';
 import {
   BarChart,
@@ -21,25 +21,28 @@ interface PrevisionData {
 }
 
 export default function StockForecast() {
-  const [data, setData] = useState<PrevisionData[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [dataMA, setDataMA] = useState<PrevisionData[]>([]); //moving average 
+  const [dataSES, setDataSES] = useState<PrevisionData[]>([]);  //Simple Exponential Smoothing
+  const [dataDES, setDataDES] = useState<PrevisionData[]>([]); //Double Exponential Smoothing
+
+  const [graphOption, setGraphOption] = useState("Moving average");
+  
 
   useEffect(() => {
     async function loadData() {
       try {
         const result = await getPrevisionStock();
-        // Remplacer Infinity par une valeur max fixe pour l'affichage, ex: 100
-        const sanitizedData = result.map((item: PrevisionData) => ({
-          ...item,
-          joursRestants: item.joursRestants === Infinity ? 100 : item.joursRestants,
-          joursRestantsLabel: item.joursRestants === Infinity ? '∞' : item.joursRestants,
-        }));
-        setData(sanitizedData);
+        setDataMA(result);
+        const ses = await getPrevisionStockSES();
+        console.log("ses")
+        console.log(ses);
+        setDataDES(ses);
+        const des = await getPrevisionStockDES();
+        console.log(des);
+        setDataDES(des);
       } catch (error) {
         console.error('Erreur lors du chargement des prévisions :', error);
-      } finally {
-        setLoading(false);
-      }
+      } 
     }
 
     loadData();
@@ -48,20 +51,50 @@ export default function StockForecast() {
   
 
   return (
-    <div className={style.chartContainer}>
-      <h3>Prévisions de stock (en jours restants)</h3>
-      {loading ? (
-        <p>Chargement...</p>
-      ) : (
-        <ResponsiveContainer width="100%" height={400}>
-          <BarChart data={data} margin={{ top: 20, right: 30, left: 10, bottom: 40 }}>
+    <div className={style.cardWrapper}>
+      <select value={graphOption} onChange={e => setGraphOption(e.target.value)}> 
+        <option value="Moving average"> Moving average </option>
+        <option value="Lissage exponentiel simple"> Lissage exponentiel simple </option>
+        <option value="Double Exponential Smoothing"> Double Exponential Smoothing </option>
+      </select>
+      <h3 className={style.chartTitle}>Prévisions de stock (en jours restants)</h3>
+
+      { graphOption == "Moving average" &&
+        <ResponsiveContainer width="100%" height='100%'>
+          <BarChart data={dataMA} margin={{ top: 20, right: 30, left: 10, bottom: 40 }}>
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="nom" angle={-45} textAnchor="end" interval={0} height={80} />
+            <XAxis dataKey="nom" angle={-45} textAnchor="end" interval={0} height={80}/>
             <YAxis label={{ value: 'Jours restants', angle: -90, position: 'insideLeft' }} />
             <Bar dataKey="joursRestants" fill="#8884d8" />
+            <Tooltip />
           </BarChart>
-        </ResponsiveContainer>
-      )}
+        </ResponsiveContainer>  
+      }
+
+      { graphOption == "Lissage exponentiel simple" &&
+        <ResponsiveContainer width="100%" height='100%'>
+          <BarChart data={dataSES} margin={{ top: 20, right: 30, left: 10, bottom: 40 }}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="nom" angle={-45} textAnchor="end" interval={0} height={80}/>
+            <YAxis label={{ value: 'Jours restants', angle: -90, position: 'insideLeft' }} />
+            <Bar dataKey="joursRestants" fill="#8884d8" />
+            <Tooltip />
+          </BarChart>
+        </ResponsiveContainer>  
+      }
+
+      { graphOption == "Double Exponential Smoothing" &&
+        <ResponsiveContainer width="100%" height='100%'>
+          <BarChart data={dataDES} margin={{ top: 20, right: 30, left: 10, bottom: 40 }}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="nom" angle={-45} textAnchor="end" interval={0} height={80}/>
+            <YAxis label={{ value: 'Jours restants', angle: -90, position: 'insideLeft' }} />
+            <Bar dataKey="joursRestants" fill="#8884d8" />
+            <Tooltip />
+          </BarChart>
+        </ResponsiveContainer>  
+      }
+           
     </div>
   );
 }

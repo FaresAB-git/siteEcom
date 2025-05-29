@@ -1,25 +1,31 @@
-.chartContainer {
-  width: 45%;
-  height: 300px; /* Hauteur du graphique */
-  margin: 20px 0;
-  background: white;
+/* "Carte" autour du graphique */
+.cardWrapper {
+  width: 100%;
+  max-width: 500px;
+  height: 350px;
+  margin: 20px;
   padding: 20px;
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  border-radius: 10px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
+/* Titre du graphique */
 .chartTitle {
-  font-size: 24px;
+  font-size: 20px;
   font-weight: bold;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   color: #333;
+  text-align: center;
 }
 
-@media (max-width: 768px) {
-  .chartContainer {
-    height: 300px;
-  }
-
-  .chartTitle {
-    font-size: 20px;
-    margin-bottom: 15px;
-  }
+/* Conteneur du graphique qui contient le ResponsiveContainer */
+.chartInner {
+  flex: 1;
+  min-height: 200px;
+  position: relative;
 }

@@ -10,7 +10,7 @@ import {
   CartesianGrid,
   ResponsiveContainer,
 } from 'recharts';
-import style from "../style/VenteSemaineChart.module.css";  // Import du CSS module
+import style from "../style/VenteSemaineChart.module.css";  
 
 interface SalesData {
   date: string;
@@ -39,15 +39,22 @@ export default function ChiffreAffaireChart() {
   if (loading) return <p>Chargement du graphique...</p>;
 
   return (
-    <div className={style.chartContainer}>
-      <ResponsiveContainer width="100%" height="100%">
-        <LineChart data={data}>
-          <XAxis dataKey="date" />
-          <YAxis allowDecimals={true} />
-          <Tooltip />
-          <Line type="monotone" dataKey="total" stroke="#123499" strokeWidth={2} />
-        </LineChart>
-      </ResponsiveContainer>
-    </div>
+    <div className={style.cardWrapper}>
+  <h2 className={style.chartTitle}> Chiffre d'affaire de la semaine </h2>
+  <div className={style.chartInner}>
+    <ResponsiveContainer width="100%" height="100%">
+      <LineChart data={data}>
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis dataKey="date"/>
+        <YAxis
+          allowDecimals={true}
+          label={{value: "Chiffre d'affaire",angle: -90, position: 'insideLeft',offset: 15}}
+        />
+        <Tooltip />
+        <Line type="monotone" dataKey="total" stroke="#123499" strokeWidth={2} />
+      </LineChart>
+    </ResponsiveContainer>
+  </div>
+</div>
   );
 }

@@ -37,18 +37,22 @@ export default function VenteSemaineChart() {
     loadData();
   }, []);
 
-  if (loading) return <p>Chargement du graphique...</p>;
-
   return (
-    <div className={style.chartContainer}>
-      <ResponsiveContainer width="100%" height="100%">
-        <LineChart data={data}>
-          <XAxis dataKey="date" />
-          <YAxis allowDecimals={false} />
-          <Tooltip />
-          <Line type="monotone" dataKey="salesCount" stroke="#123499" strokeWidth={2} />
-        </LineChart>
-      </ResponsiveContainer>
-    </div>
+   
+      <div className={style.cardWrapper}>
+        <h2 className={style.chartTitle}> Vente de la semaine </h2>
+        <div className={style.chartInner}>
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={data}>
+              <XAxis dataKey="date" />
+              <YAxis allowDecimals={false} label={{ value: 'Ventes', angle: -90 }} />
+              <Tooltip />
+              <Line type="monotone" dataKey="salesCount" stroke="#123499" strokeWidth={2} />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+
+    
   );
 }

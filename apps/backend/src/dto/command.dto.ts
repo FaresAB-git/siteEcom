@@ -8,9 +8,9 @@ export class CreateCommandeDto {
   @IsString()
   adresse: string;
 
-  @IsOptional()
+
   @IsEmail()
-  clientEmail?: string;
+  clientEmail: string;
 
   @IsNumber({ maxDecimalPlaces: 2 })
   @Min(0)

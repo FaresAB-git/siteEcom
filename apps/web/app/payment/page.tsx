@@ -67,7 +67,7 @@ export default function CheckoutPage() {
       console.log("Commande créée :", result);
 
       clearCart();
-      //router.push('/');
+      router.push('/');
     } catch (err) {
       console.error("Erreur lors de la création de la commande :", err);
       alert("Une erreur est survenue lors du paiement.");

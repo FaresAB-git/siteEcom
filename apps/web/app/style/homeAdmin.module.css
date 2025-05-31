@@ -2,13 +2,12 @@
     margin-left: 200px; /* même largeur navbar */
     padding: 20px;
     height: 100%;
-    background-color: lightgrey;
+    background-color: white;
 }
 
 .container {
     width: 80%;
     margin: auto;
-    background: white;
     padding: 20px;
     height: 100%;
 }

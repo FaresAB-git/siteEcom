@@ -10,11 +10,12 @@ import { CollectionModule } from './collection/collection.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { CommandeModule } from './commande/commande.module';
 import { DashboardModule } from './dashboard/dashboard.module';
+import { InvoiceModule } from './invoice/invoice.module';
 
 
 
 @Module({
-  imports: [ConfigModule.forRoot({ isGlobal: true }), AuthModule, PrismaModule, UserModule, ProduitModule, CollectionModule, CloudinaryModule, CommandeModule, DashboardModule],
+  imports: [ConfigModule.forRoot({ isGlobal: true }), AuthModule, PrismaModule, UserModule, ProduitModule, CollectionModule, CloudinaryModule, CommandeModule, DashboardModule, InvoiceModule],
   controllers: [AppController],
   providers: [AppService],
 })

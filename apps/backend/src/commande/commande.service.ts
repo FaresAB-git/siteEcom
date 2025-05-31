@@ -9,11 +9,13 @@ import { CreateCommandeWithProduitsDto } from 'src/dto/createComandWithProduct.d
 import { CreateCommandeDto } from 'src/dto/command.dto';
 import { CommandeResponseDto } from 'src/dto/commandResponse.dto';
 import { ProductResponseDto } from 'src/dto/product-response.dto';
+import { InvoiceService } from 'src/invoice/invoice.service';
+import { MailService } from 'src/mail/mail.service';
 
 
 @Injectable()
 export class CommandeService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService, private invoiceService: InvoiceService, private mailService: MailService) {}
 
   async createCommande(data: CreateCommandeWithProduitsDto) {
     const { commande, produits } = data;
@@ -45,6 +47,31 @@ export class CommandeService {
        
         throw new BadRequestException('Erreur lors de l ajout des produits à la commande');
       }
+
+      //Récupérer les produits enregistrés avec prix et quantité
+      const produitsEnregistres = await this.prisma.commandeProduit.findMany({
+        where: { commandeId: createdCommande.id },
+      });
+
+      //Générer le PDF
+      const pdfBuffer = await this.invoiceService.generateInvoicePdf(
+        createdCommande,
+        produitsEnregistres,
+      );
+
+      if (!createdCommande.clientEmail) { //verifier le mail pour l'envoie
+        throw new BadRequestException('Aucune adresse email fournie pour cette commande.');
+      }
+
+      // Envoyer l'email avec la facture en pièce jointe
+      await this.mailService.sendInvoiceEmail(
+        createdCommande.clientEmail,
+        pdfBuffer,
+        createdCommande.id,
+      );
+
+      console.log("email envoyé");
+
 
       return createdCommande;
     } catch (err) {

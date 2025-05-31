@@ -36,7 +36,7 @@ export default function StockForecast() {
         const ses = await getPrevisionStockSES();
         console.log("ses")
         console.log(ses);
-        setDataDES(ses);
+        setDataSES(ses);
         const des = await getPrevisionStockDES();
         console.log(des);
         setDataDES(des);

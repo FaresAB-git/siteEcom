@@ -27,20 +27,20 @@ export class ProduitService {
       if (error instanceof PrismaClientKnownRequestError) {
         throw error;
       }
-      throw new InternalServerErrorException('Erreur lors de la création de la collection');
+      throw new InternalServerErrorException('Erreur lors de la création du produit');
     }
   }
 
   // produit.service.ts
   async getProducts():Promise<ProductResponseDto[]>  {
     try {
-      const produits = await this.prisma.produit.findMany();
+      const produits = await this.prisma.produit.findMany({include:{collections:{include:{collection:true}}}});
       return plainToInstance(ProductResponseDto, produits, { excludeExtraneousValues: true });
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
         throw error;
       }
-      throw new InternalServerErrorException('Erreur lors de la création de la collection');
+      throw new InternalServerErrorException('Erreur lors de la récupération des produits');
     }
   }
 
@@ -48,13 +48,19 @@ export class ProduitService {
     try {
       const produit = await this.prisma.produit.findUnique({
         where: { id: productId }, 
+        include:{collections:
+          {include:{
+            collection:true
+            }
+          }}
       });
+      console.log(produit);
       return plainToInstance(ProductResponseDto, produit, { excludeExtraneousValues: true }); 
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
         throw error;
       }
-      throw new InternalServerErrorException('Erreur lors de la création de la collection');
+      throw new InternalServerErrorException('Erreur lors de la récupération du produit');
     }
   }
 
@@ -68,7 +74,7 @@ export class ProduitService {
       if (error instanceof PrismaClientKnownRequestError) {
         throw error;
       }
-      throw new InternalServerErrorException('Erreur lors de la création de la collection');
+      throw new InternalServerErrorException('Erreur lors de la suppression du produit');
     }
   }
 
@@ -96,6 +102,23 @@ export class ProduitService {
         throw error;
       }
       throw new InternalServerErrorException('Erreur lors de la mise à jour du produit');
+    }
+  }
+
+  async getNewProduct(): Promise<ProductResponseDto[]>{
+    try {
+      const produits = await this.prisma.produit.findMany({
+        orderBy: { createdAt: 'desc'},
+        take:5
+      });
+      return plainToInstance(ProductResponseDto, produits, { excludeExtraneousValues: true }); 
+
+    } catch (error) {
+      console.error('Erreur dans getNewProduct:', error);
+      if (error instanceof PrismaClientKnownRequestError) {
+        throw error;
+      }
+      throw new InternalServerErrorException('Erreur lors de la récupération des produits');
     }
   }
 }

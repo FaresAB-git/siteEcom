@@ -1,24 +1,6 @@
 import { ProdDto } from "../types/product.dto";
 import { ProductResponseDto } from "../types/productResponse.dto";
 
-// export async function createProduct(product: ProdDto){
-//     const res = await fetch("http://localhost:8000/produit",{
-//         method:'POST',
-//         credentials: 'include',
-//         headers: {
-//             'Content-Type': 'application/json',
-//           },
-//           body: JSON.stringify(product)
-//     });
-
-//     if (!res.ok) {
-//         const error = await res.json();
-//         throw new Error(error.message || 'Erreur lors de la création du produit');
-//       }
-    
-//       return res.json();
-    
-// }
 
 export async function createProduct(product: ProdDto, imageFile: File|null) {
   if (!imageFile) throw new Error("Image manquante pour la création du produit.");
@@ -101,7 +83,7 @@ export async function updateProduct(id: number, product: ProdDto, imageFile: Fil
   if (imageFile) {
     const formData = new FormData();
     formData.append('file', imageFile);
-    formData.append('upload_preset', 'votre_upload_preset'); // adapte si nécessaire
+    formData.append('upload_preset', 'votre_upload_preset'); 
 
     const uploadRes = await fetch("http://localhost:8000/upload", {
       method: 'POST',
@@ -156,4 +138,20 @@ export async function uploadImg(imgFile: File): Promise<string>{
   
     return imageUrl
 
+}
+
+export async function getNewProducts():Promise<ProductResponseDto[]> {
+  const response = await fetch("http://localhost:8000/produit/newProducts", {
+    method:'GET',
+    headers:{
+      'Content-Type': 'application/json',
+    }
+  });
+
+  const data = await response.json();
+
+  if(!response.ok){
+    throw new Error (data.message || 'erreur de connexion');
+  }
+  return data;
 }

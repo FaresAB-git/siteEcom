@@ -1,3 +1,6 @@
+import { CollectionResponseDto } from "./collection.dto";
+import { CollectionProduitDto } from "./collectionProduit.dto";
+
 export interface ProductResponseDto {
     id:number
     nom: string;
@@ -5,4 +8,5 @@ export interface ProductResponseDto {
     imgPath: string;
     prix: number;
     stock: number;
+    collections: CollectionProduitDto[];
   }

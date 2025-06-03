@@ -5,6 +5,7 @@
   margin: auto;
   background-color: white;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  min-height: 100%;
 }
 
 .galleryContainer {
@@ -71,11 +72,14 @@
 }
 
 .filterBar {
+  position: absolute;
+  margin-top: 100px;
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 0.5rem;
   justify-content: center;
-  margin: 1rem 0;
+  background-color: whitesmoke;
+  padding: 15px;
 }
 
 .searchInput {
@@ -98,4 +102,12 @@
 
 .sortButton:hover {
     background-color: #e0e0e0;
+}
+
+.collectionSortElemet{
+  display: flex;
+}
+
+.collectionLabel{
+  width: 150px;
 }

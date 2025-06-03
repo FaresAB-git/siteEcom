@@ -8,6 +8,11 @@ import { ProductResponseDto } from "src/dto/product-response.dto";
 export class ProduitController {
   constructor(private readonly produitService: ProduitService) {}
 
+  @Get('/newProducts')
+  async getNouveaute(): Promise<ProductResponseDto[]> {
+    return this.produitService.getNewProduct();
+  }
+
   @UseGuards(AuthGuard('jwt'))
   @Post("")
   async createProduct(@Body() prod: ProdDto) {
@@ -20,7 +25,6 @@ export class ProduitController {
   @Get("")
   async getProducts():Promise<ProductResponseDto[]>{
      const products:ProductResponseDto[] = await this.produitService.getProducts();
-     console.log(products);
      return products;
   }
 
@@ -48,4 +52,5 @@ export class ProduitController {
     return updated;
   }
 
+  
 }

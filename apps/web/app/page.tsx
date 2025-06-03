@@ -4,6 +4,7 @@ import ProductGallery from "./components/ProductGallery";
 import CollectionCarousel from "./components/CollectionsCarousel";
 import Footer from "./components/Footer";
 import Banner from './components/Banner'
+import NewProducts from "./components/NewProducts";
 
 
 
@@ -13,6 +14,7 @@ export default function Home() {
       <HorizontalNavBar/>
       <Banner/>
       <CollectionCarousel/>
+      <NewProducts/>
       <ProductGallery/>
       <Footer/>
     </>

@@ -5,6 +5,8 @@ import { getProducts } from "../services/productServices";
 import style from "../style/productGallery.module.css";
 import { ProductResponseDto } from "../types/productResponse.dto";
 import { useRouter } from "next/navigation";
+import { CollectionResponseDto } from "../types/collection.dto";
+import { getCollections } from "../services/collectionServices";
 
 interface ProductGalleryProps {
     filter?: boolean;
@@ -15,30 +17,58 @@ export default function ProductGallery({ filter = false }: ProductGalleryProps) 
     const [products, setProducts] = useState<ProductResponseDto[]>([]);
     const [search, setSearch] = useState("");
     const [sortOrder, setSortOrder] = useState<"asc" | "desc" | null>(null);
+    const [collections, setCollections] = useState<CollectionResponseDto[]>([]);
+    const [selectedCollections, setSelectedCollections] = useState<number[]>([]);
+
+    const handleCollectionToggle = (collectionId: number) => {
+        setSelectedCollections((prev) => {
+            if (prev.includes(collectionId)) {
+                const updated = prev.filter(id => id !== collectionId);
+                return updated;
+            } else {
+                const updated = [...prev, collectionId];
+                return updated;
+            }
+        });
+    };
+
+  
 
     useEffect(() => {
         const fetchProduct = async () => {
             try {
                 const products = await getProducts();
+                console.log("produit:");
+                console.log(products);
                 setProducts(products);
+
+                const collections = await getCollections();
+                setCollections(collections);
             } catch (error) {
                 console.log('Erreur lors de la récupération des produits');
             }
         };
         fetchProduct();
+
     }, []);
 
     // Recherche
-    const filteredProducts = products.filter(product =>
-        product.nom.toLowerCase().includes(search.toLowerCase())
-    );
-
-    // Tri par prix
-    const sortedProducts = [...filteredProducts].sort((a, b) => {
+    
+    const filteredAndSortedProducts = products
+    .filter(product => {
+        const matchesSearch = product.nom.toLowerCase().includes(search.toLowerCase());
+        const matchesCollection =
+    selectedCollections.length === 0 ||
+    product.collections.some((c) => selectedCollections.includes(c.collection.id));
+        console.log("selected coll: " + selectedCollections);
+        return matchesSearch && matchesCollection;
+    })
+    .sort((a, b) => {
         if (sortOrder === "asc") return a.prix - b.prix;
         if (sortOrder === "desc") return b.prix - a.prix;
         return 0;
     });
+
 
     return (
         <div className={style.container}>
@@ -46,6 +76,7 @@ export default function ProductGallery({ filter = false }: ProductGalleryProps) 
 
             {filter && (
                 <div className={style.filterBar}>
+                    
                     <input
                         type="text"
                         placeholder="Rechercher un produit..."
@@ -65,11 +96,22 @@ export default function ProductGallery({ filter = false }: ProductGalleryProps) 
                     >
                         Prix décroissant
                     </button>
+                    <p> Par collection </p>
+                    {collections.map((collections) => (
+                        <div key={collections.id} className={style.collectionSortElemet}> 
+                            <label className={style.collectionLabel}> {collections.nom} </label> 
+                            
+                            <input type="checkbox"
+                            checked={selectedCollections.includes(collections.id)}
+                            onChange={() => handleCollectionToggle(collections.id)}/>
+                        </div>
+                    )) }
+                    
                 </div>
             )}
 
             <div className={style.galleryContainer}>
-                {(filter ? sortedProducts : products).map((product, index) => (
+                {(filter ? filteredAndSortedProducts : products).map((product, index) => (
                     <div
                         key={index}
                         className={style.productCard}
@@ -81,7 +123,6 @@ export default function ProductGallery({ filter = false }: ProductGalleryProps) 
                                 alt={product.nom}
                                 fill
                                 className={style.productImage}
-                                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                             />
                         </div>
                         <h3 className={style.productName}>{product.nom}</h3>

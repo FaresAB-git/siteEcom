@@ -10,7 +10,7 @@ import {
   CartesianGrid,
   ResponsiveContainer,
 } from 'recharts';
-import style from "../style/VenteSemaineChart.module.css";
+import style from "../style/stockChart.module.css";
 
 interface PrevisionData {
   id: number;

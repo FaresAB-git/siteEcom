@@ -94,3 +94,69 @@
 }
 
 
+.mobileMenuButton {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .nav {
+    display: none;
+  }
+
+  .mobileMenuButton {
+    display: block;
+    position: absolute;
+    left: 16px;
+    top: 16px;
+    background: none;
+    border: none;
+    z-index: 1002;
+    color: #333;
+  }
+
+  .mobileMenuButton button {
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  .mobileMenu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 250px;
+    background-color: white;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    z-index: 1001;
+    animation: slideIn 0.3s ease forwards;
+  }
+
+  .closeButton {
+    align-self: flex-end;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  .collectionTitle {
+    margin-top: 10px;
+    font-weight: bold;
+  }
+
+  @keyframes slideIn {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+}
+
+
+

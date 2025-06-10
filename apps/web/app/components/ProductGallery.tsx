@@ -99,11 +99,12 @@ export default function ProductGallery({ filter = false }: ProductGalleryProps) 
                     <p> Par collection </p>
                     {collections.map((collections) => (
                         <div key={collections.id} className={style.collectionSortElemet}> 
-                            <label className={style.collectionLabel}> {collections.nom} </label> 
-                            
                             <input type="checkbox"
+                            className={style.checkbox}
                             checked={selectedCollections.includes(collections.id)}
                             onChange={() => handleCollectionToggle(collections.id)}/>
+
+                            <label className={style.collectionLabel}> {collections.nom} </label> 
                         </div>
                     )) }
                     

@@ -8,6 +8,7 @@ import VenteSemaineChart from "../components/VenteSemaineChart"
 import style from "../style/homeAdmin.module.css"
 import ChiffreAffaireChart from "../components/ChiffreAffaireChart";
 import StockForecast from "../components/StockForecastBarchart";
+import VenteParCollection from "../components/VenteParCollection";
 
 
 export default function Home() {
@@ -23,6 +24,7 @@ export default function Home() {
             <VenteSemaineChart/>
             <ChiffreAffaireChart/>
             <StockForecast/>
+            <VenteParCollection/>
           </div>
           
         </div>

@@ -268,4 +268,46 @@ export class DashboardService {
     })
     
   }
+
+  async getVentesParCollection(){
+    
+  
+    //recupere les collections avec les produits et les commandes pour chaque produits
+    const ventesParCollection = await this.prisma.collection.findMany({
+    include: {
+      produits: {
+        include: {
+          produit: {
+            include: {
+              commandes: true, 
+            },
+          },
+        },
+      },
+    },
+    });
+
+    const resultats = ventesParCollection.map((collection) => {
+      let totalQuantite = 0;
+      let totalVentes = 0;
+
+      for (const cp of collection.produits) {
+        for (const commande of cp.produit.commandes) {
+          totalQuantite += commande.quantite;
+          totalVentes += parseFloat(commande.prixUnitaire.toString()) * commande.quantite;
+        }
+      }
+
+      return {
+        collectionId: collection.id,
+        nom: collection.nom,
+        totalQuantite,
+        totalVentes,
+      };
+    });
+
+    return resultats;
+  }
+
+  
 }

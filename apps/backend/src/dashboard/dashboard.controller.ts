@@ -17,17 +17,22 @@ export class DashboardController {
 
   @Get("/previsionStock")
   async getPrevisionStock(){
-    return this.dashboardService.getStockForecast()
+    return this.dashboardService.getStockForecast();
   }
 
   @Get("/previsionStockSES")
   async getPrevisionStockMA(){
-    return this.dashboardService.getStockForecastSES()
+    return this.dashboardService.getStockForecastSES();
   }
 
   @Get("/previsionStockDES")
   async getPrevisionStockDES(){
-    return this.dashboardService.getStockForecastDES()
+    return this.dashboardService.getStockForecastDES();
+  }
+
+  @Get("/ventesParCollection")
+  async getVenteParCollection(){
+    return this.dashboardService.getVentesParCollection();
   }
 
 

@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import style from "../../style/login.module.css";
 import { useRouter } from 'next/navigation';
-import { login } from "../../services/userServices";
+import { login, register } from "../../services/userServices";
 
 
 export default function Login() {
@@ -17,7 +17,7 @@ export default function Login() {
     setError(null); 
     try {
       console.log(email, password);
-      const token = await login(email, password);
+      const token = await register(email, password);
       console.log(token);
       localStorage.setItem("token", token.access_token);
       localStorage.setItem("user", JSON.stringify(token.user));
@@ -63,11 +63,11 @@ export default function Login() {
             Login
           </button>
           <p className={style.registerP}>
-            Pas encore de compte ?{" "}
-            <Link href="/clientAccount/register" className={style.registerLink}>
-              Créez-en
+            déja un compte ?{" "}
+            <Link href="/clientAccount/login" className={style.registerLink}>
+              connecté vous ici
             </Link>{" "}
-            un gratuitement.
+            
           </p>
         </form>
       </div>

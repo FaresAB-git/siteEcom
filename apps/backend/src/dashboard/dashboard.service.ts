@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { startOfWeek, addDays, format, endOfWeek, subDays, isSameDay } from 'date-fns';
+import { startOfWeek, addDays, format, endOfWeek, subDays, isSameDay, addMinutes } from 'date-fns';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class DashboardService {
@@ -309,5 +310,66 @@ export class DashboardService {
     return resultats;
   }
 
+  async generateFakeCommandes(nombre: number = 20) {
+    const produits = await this.prisma.produit.findMany();
+
+    for (let i = 0; i < nombre; i++) {
+      let total = 0;
+
+      const nbProduits = Math.floor(Math.random() * 3) + 1;
+      const produitsDansCommande: Prisma.CommandeProduitCreateWithoutCommandeInput[] = [];
+
+      for (let j = 0; j < nbProduits; j++) {
+        const produit = produits[Math.floor(Math.random() * produits.length)];
+        const quantite = Math.floor(Math.random() * 3) + 1;
+
+        produitsDansCommande.push({
+          produit: {
+            connect: { id: produit.id },
+          },
+          quantite,
+          prixUnitaire: produit.prix,
+        });
+
+        total += quantite * Number(produit.prix);
+      }
+
+      const randomDate = addDays(
+        subDays(new Date(), 30),
+        Math.floor(Math.random() * 30)
+      );
+
+      await this.prisma.commande.create({
+        data: {
+          clientEmail: `fakeuser${i}@test.com`,
+          adresse: '1 rue du Test',
+          ville: 'Paris',
+          codePostal: '75001',
+          pays: 'France',
+          total: total.toFixed(2),
+          createdAt: randomDate,
+          produits: {
+            create: produitsDansCommande,
+          },
+        },
+      });
+    }
+
+    return { message: `${nombre} fausses commandes générées avec succès.` };
+  }
+
+  async DeleteFakeCommandes() {
+  const deleted = await this.prisma.commande.deleteMany({
+    where: {
+      clientEmail: {
+        startsWith: 'fakeuser',
+      },
+    },
+  });
+
+  return {
+    message: `${deleted.count} fausses commandes supprimées avec succès.`,
+  };
+}
   
 }

@@ -100,3 +100,37 @@ export async function getVenteParCollection(){
     return data
 }
 
+export async function createCommandTest(){
+    const response = await fetch("http://localhost:8000/dashboard/genererCommandeTest",{
+        method:'POST',
+        headers:{
+            'Content-Type': 'application/json',
+        }
+    });
+
+    const data = await response.json();
+    console.log(data);
+    if(!response.ok){
+        throw new Error (data.message || 'erreur de connexion');
+    }
+
+    return data
+}
+
+export async function DelCommandeTest(){
+    const response = await fetch("http://localhost:8000/dashboard/DelCommandeTest",{
+        method:'POST',
+        headers:{
+            'Content-Type': 'application/json',
+        }
+    });
+
+    const data = await response.json();
+    console.log(data);
+    if(!response.ok){
+        throw new Error (data.message || 'erreur de connexion');
+    }
+
+    return data
+}
+

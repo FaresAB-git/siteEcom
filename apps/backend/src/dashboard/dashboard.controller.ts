@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Post, Delete } from '@nestjs/common';
 import { DashboardService } from './dashboard.service';
 
 @Controller('dashboard')
@@ -33,6 +33,16 @@ export class DashboardController {
   @Get("/ventesParCollection")
   async getVenteParCollection(){
     return this.dashboardService.getVentesParCollection();
+  }
+
+  @Post("/genererCommandeTest")
+  async genererCommandeTest(){
+    return this.dashboardService.generateFakeCommandes();
+  }
+
+  @Delete("/DelCommandeTest")
+  async DelCommandeTest(){
+    return this.dashboardService.DeleteFakeCommandes();
   }
 
 

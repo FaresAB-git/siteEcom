@@ -11,11 +11,12 @@ import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { CommandeModule } from './commande/commande.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { InvoiceModule } from './invoice/invoice.module';
+import { StockPrevModule } from './stock-prev/stock-prev.module';
 
 
 
 @Module({
-  imports: [ConfigModule.forRoot({ isGlobal: true }), AuthModule, PrismaModule, UserModule, ProduitModule, CollectionModule, CloudinaryModule, CommandeModule, DashboardModule, InvoiceModule],
+  imports: [ConfigModule.forRoot({ isGlobal: true }), AuthModule, PrismaModule, UserModule, ProduitModule, CollectionModule, CloudinaryModule, CommandeModule, DashboardModule, InvoiceModule, StockPrevModule],
   controllers: [AppController],
   providers: [AppService],
 })

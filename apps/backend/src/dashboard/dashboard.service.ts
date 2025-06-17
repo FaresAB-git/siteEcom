@@ -311,52 +311,52 @@ export class DashboardService {
   }
 
   async generateFakeCommandes(nombre: number = 20) {
-    const produits = await this.prisma.produit.findMany();
+  const produits = await this.prisma.produit.findMany();
 
-    for (let i = 0; i < nombre; i++) {
-      let total = 0;
+  for (let i = 0; i < nombre; i++) {
+    let total = 0;
 
-      const nbProduits = Math.floor(Math.random() * 3) + 1;
-      const produitsDansCommande: Prisma.CommandeProduitCreateWithoutCommandeInput[] = [];
+    const nbProduits = Math.floor(Math.random() * 3) + 1;
+    const produitsDansCommande: Prisma.CommandeProduitCreateWithoutCommandeInput[] = [];
 
-      for (let j = 0; j < nbProduits; j++) {
-        const produit = produits[Math.floor(Math.random() * produits.length)];
-        const quantite = Math.floor(Math.random() * 3) + 1;
+    for (let j = 0; j < nbProduits; j++) {
+      const produit = produits[Math.floor(Math.random() * produits.length)];
+      const quantite = Math.floor(Math.random() * 3) + 1;
 
-        produitsDansCommande.push({
-          produit: {
-            connect: { id: produit.id },
-          },
-          quantite,
-          prixUnitaire: produit.prix,
-        });
-
-        total += quantite * Number(produit.prix);
-      }
-
-      const randomDate = addDays(
-        subDays(new Date(), 30),
-        Math.floor(Math.random() * 30)
-      );
-
-      await this.prisma.commande.create({
-        data: {
-          clientEmail: `fakeuser${i}@test.com`,
-          adresse: '1 rue du Test',
-          ville: 'Paris',
-          codePostal: '75001',
-          pays: 'France',
-          total: total.toFixed(2),
-          createdAt: randomDate,
-          produits: {
-            create: produitsDansCommande,
-          },
+      produitsDansCommande.push({
+        produit: {
+          connect: { id: produit.id },
         },
+        quantite,
+        prixUnitaire: produit.prix,
       });
+
+      total += quantite * Number(produit.prix);
     }
 
-    return { message: `${nombre} fausses commandes générées avec succès.` };
+    const randomDate = addDays(
+      subDays(new Date(), 6),
+      Math.floor(Math.random() * 7)
+    );
+
+    await this.prisma.commande.create({
+      data: {
+        clientEmail: `fakeuser${i}@test.com`,
+        adresse: '1 rue du Test',
+        ville: 'Paris',
+        codePostal: '75001',
+        pays: 'France',
+        total: total.toFixed(2),
+        createdAt: randomDate,
+        produits: {
+          create: produitsDansCommande,
+        },
+      },
+    });
   }
+
+  return { message: `${nombre} fausses commandes générées pour la semaine dernière.` };
+}
 
   async DeleteFakeCommandes() {
   const deleted = await this.prisma.commande.deleteMany({
@@ -371,5 +371,70 @@ export class DashboardService {
     message: `${deleted.count} fausses commandes supprimées avec succès.`,
   };
 }
+
+
+async generateGrowingFakeCommandes(nombre: number = 20) {
+  const produits = await this.prisma.produit.findMany();
+
+  // Pondérations pour chaque jour (du plus ancien au plus récent)
+  // Plus la valeur est haute, plus la probabilité de choisir ce jour est élevée
+  const poidsParJour = [1, 2, 3, 4, 5, 6, 7]; 
+  const totalPoids = poidsParJour.reduce((a, b) => a + b, 0);
+
+  // Génère les dates pondérées à l’avance
+  const joursPossibles = poidsParJour.map((poids, index) => {
+    const date = addDays(subDays(new Date(), 6), index); // 6 jours avant jusqu’à aujourd’hui
+    return { date, poids };
+  });
+
+  for (let i = 0; i < nombre; i++) {
+    let total = 0;
+    const nbProduits = Math.floor(Math.random() * 3) + 1;
+    const produitsDansCommande: Prisma.CommandeProduitCreateWithoutCommandeInput[] = [];
+
+    for (let j = 0; j < nbProduits; j++) {
+      const produit = produits[Math.floor(Math.random() * produits.length)];
+      const quantite = Math.floor(Math.random() * 3) + 1;
+
+      produitsDansCommande.push({
+        produit: { connect: { id: produit.id } },
+        quantite,
+        prixUnitaire: produit.prix,
+      });
+
+      total += quantite * Number(produit.prix);
+    }
+
+    // Tirage aléatoire pondéré pour la date
+    const random = Math.random() * totalPoids;
+    let cumulative = 0;
+    let randomDate = new Date();
+    for (const { date, poids } of joursPossibles) {
+      cumulative += poids;
+      if (random <= cumulative) {
+        randomDate = date;
+        break;
+      }
+    }
+
+    await this.prisma.commande.create({
+      data: {
+        clientEmail: `fakeuser${i}@test.com`,
+        adresse: '1 rue du Test',
+        ville: 'Paris',
+        codePostal: '75001',
+        pays: 'France',
+        total: total.toFixed(2),
+        createdAt: randomDate,
+        produits: {
+          create: produitsDansCommande,
+        },
+      },
+    });
+  }
+
+  return { message: `${nombre} fausses commandes générées avec tendance croissante sur la semaine.` };
+}
+
   
 }

@@ -37,7 +37,7 @@ export class DashboardController {
 
   @Post("/genererCommandeTest")
   async genererCommandeTest(){
-    return this.dashboardService.generateFakeCommandes();
+    return this.dashboardService.generateGrowingFakeCommandes();
   }
 
   @Delete("/DelCommandeTest")

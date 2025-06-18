@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Prisma } from '@prisma/client';
-import { format, subDays } from 'date-fns';
+import { format, subDays, isSameDay } from 'date-fns';
 
 @Injectable()
 export class StockPrevService {
@@ -238,6 +238,55 @@ async getStockForecastDESForProduct(produitId: number, alpha = 0.8, beta = 0.2) 
     joursRestants,
   };
 }
+
+
+
+async getVenteSemaineParProduit(productId: number) {
+  const today = new Date();
+  const startDate = subDays(today, 6); // 7 jours au total
+
+  // Récupération des commandes contenant le produit pour les 7 derniers jours
+  const commandes = await this.prisma.commande.findMany({
+    where: {
+      createdAt: {
+        gte: startDate,
+        lte: today,
+      },
+      produits: {
+        some: {
+          produitId: productId, // Vérifie si le produit est dans la commande
+        },
+      },
+    },
+    select: {
+      createdAt: true,
+    },
+  });
+
+  // Initialiser le tableau résultat avec 0 ventes
+  const result: { date: string; salesCount: number }[] = [];
+  for (let i = 0; i < 7; i++) {
+    const date = subDays(today, 6 - i);
+    result.push({
+      date: format(date, 'dd-MM'),
+      salesCount: 0,
+    });
+  }
+
+  // Compter les ventes du produit pour chaque jour
+  commandes.forEach((cmd) => {
+    for (let i = 0; i < 7; i++) {
+      const date = subDays(today, 6 - i);
+      if (isSameDay(cmd.createdAt, date)) {
+        result[i].salesCount++;
+        break;
+      }
+    }
+  });
+
+  return result;
+}
+
 
 
 }

@@ -22,6 +22,11 @@ export class StockPrevController {
     return this.stockPrevService.getStockForecastDESForProduct(1, 0.8, 0.2);
   }
 
+  @Get('ventesProduitTest')
+  async getVenteSemaineParProduit(){
+    return this.stockPrevService.getVenteSemaineParProduit(1);
+  }
+
   @Post('genererCommandeTest')
   async genererCommandeTest(){
     return this.stockPrevService.generateGrowingFakeCommandesForProduct(1);

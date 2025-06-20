@@ -1,0 +1,20 @@
+.mainContent {
+    margin-left: 200px; /* même largeur navbar */
+    padding: 20px;
+    height: 100%;
+    background-color: white;
+}
+
+.container {
+    width: 80%;
+    margin: auto;
+    margin-top: 75px;
+    padding: 20px;
+    height: 100%;
+}
+
+.chartContainer{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}

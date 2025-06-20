@@ -1,4 +1,4 @@
-import { Controller, Get, Post } from '@nestjs/common';
+import { Controller, Get, Post, Delete } from '@nestjs/common';
 import { StockPrevService } from './stock-prev.service';
 
 @Controller('stock-prev')
@@ -29,6 +29,14 @@ export class StockPrevController {
 
   @Post('genererCommandeTest')
   async genererCommandeTest(){
-    return this.stockPrevService.generateGrowingFakeCommandesForProduct(1);
+    await this.stockPrevService.generateGrowingFakeCommandesForProduct(1);
+    await this.stockPrevService.generateStableFakeCommandesForProduct(1);
+    await this.stockPrevService.generateDecreasingFakeCommandesForProduct(1);
+    return "commande générées"
+  }
+
+  @Delete("/DelCommandeTest")
+  async DelCommandeTest(){
+    return this.stockPrevService.DeleteFakeCommandes();
   }
 }

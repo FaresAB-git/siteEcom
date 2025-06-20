@@ -1,12 +1,19 @@
-interface PrevisionData {
+type Prevision = {
+  ventes7j: number;
+  forecastDemandeProchainJour: number;
+  joursRestants: number | null;
+};
+
+type PrevisionsResponse = {
   id: number;
   nom: string;
   stock: number;
-  ventes7j: number;
-  forecastDemandeProchainJour:number;
-  joursRestants: number;
-}
-
+  previsions: {
+    croissant: Prevision;
+    stable: Prevision;
+    decroissant: Prevision;
+  };
+};
 export async function createCommandTest(){
     const response = await fetch("http://localhost:8000/stock-prev/genererCommandeTest",{
         method:'POST',
@@ -24,7 +31,7 @@ export async function createCommandTest(){
     return data
 }
 
-export async function getPrevStockMATest(): Promise<PrevisionData>{
+export async function getPrevStockMATest(): Promise<PrevisionsResponse>{
     const response = await fetch("http://localhost:8000/stock-prev/ma",{
         method:'GET',
         headers:{
@@ -41,7 +48,7 @@ export async function getPrevStockMATest(): Promise<PrevisionData>{
     return data
 }
 
-export async function getPrevStockSESTest(): Promise<PrevisionData>{
+export async function getPrevStockSESTest(): Promise<PrevisionsResponse>{
     const response = await fetch("http://localhost:8000/stock-prev/SES",{
         method:'GET',
         headers:{
@@ -58,7 +65,7 @@ export async function getPrevStockSESTest(): Promise<PrevisionData>{
     return data
 }
 
-export async function getPrevStockDESTest(): Promise<PrevisionData>{
+export async function getPrevStockDESTest(): Promise<PrevisionsResponse>{
     const response = await fetch("http://localhost:8000/stock-prev/DES",{
         method:'GET',
         headers:{

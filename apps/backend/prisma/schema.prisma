@@ -34,6 +34,7 @@ model Produit {
 
   collections CollectionProduit[]
   commandes   CommandeProduit[]
+  avis        Avis[]
 }
 
 model CollectionProduit {
@@ -78,6 +79,19 @@ model CommandeProduit {
   produit      Produit   @relation(fields: [produitId], references: [id], onDelete: Cascade)
 }
 
+model Avis {
+  id        Int       @id @default(autoincrement())
+  produitId Int
+  userId    Int?      // L'utilisateur peut être anonyme
+  note      Int       // Note de 1 à 5, par exemple
+  commentaire String?  // Le commentaire laissé par le client
+  createdAt DateTime  @default(now())
+
+  produit   Produit   @relation(fields: [produitId], references: [id], onDelete: Cascade)
+  user      User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+}
+
+
 model User {
   id       Int      @id @default(autoincrement())
   email    String   @unique
@@ -85,6 +99,8 @@ model User {
   role     Role     @default(CLIENT)
 
   commandes Commande[]
+  avis        Avis[]
+
 }
 
 enum Role {

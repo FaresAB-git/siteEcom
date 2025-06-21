@@ -1,8 +1,9 @@
 'use client'
+
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation"; // ← pour la redirection côté client
 import HorizontalNavBar from "../components/HorizontalNavBar";
-//import { CommandeResponseDto } from "../types/commandResponse.dto";
-import style from "../style/productAdmin.module.css"
+import style from "../style/productAdmin.module.css";
 
 type User = {
   id: number;
@@ -10,7 +11,7 @@ type User = {
   role: string;
   commandes: CommandeResponseDto[];
 };
-// réecris pour avoir la liste des produits directement
+
 type CommandeResponseDto = {
   id: number;
   adresse: string;
@@ -33,6 +34,7 @@ type CommandeResponseDto = {
 
 export default function ClientAccount() {
   const [userInfo, setUserInfo] = useState<User | null>(null);
+  const router = useRouter(); // ← hook pour redirection
 
   useEffect(() => {
     const userString = localStorage.getItem("user");
@@ -44,9 +46,13 @@ export default function ClientAccount() {
         console.log(parsedUser);
       } catch (error) {
         console.error("Erreur lors du parsing du user :", error);
+        router.push("/clientAccount/login");
       }
+    } else {
+      
+      router.push("/clientAccount/login");
     }
-  }, []);
+  }, [router]);
 
   function convertDate(dateString: string): string {
     const date = new Date(dateString);
@@ -109,7 +115,7 @@ export default function ClientAccount() {
             )}
           </>
         ) : (
-          <h1>Vous n'êtes pas connecté</h1>
+          <h1>Chargement des données...</h1> // ← affiché temporairement pendant le check
         )}
       </div>
     </>

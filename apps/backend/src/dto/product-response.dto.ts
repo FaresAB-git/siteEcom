@@ -1,6 +1,7 @@
 // src/dto/product-response.dto.ts
 import { CollectionProduit } from '@prisma/client';
 import { Expose, Transform, Type } from 'class-transformer';
+import { AvisResponseDto } from './avisResponse.dto';
 
 export class ProductResponseDto {
   @Expose()
@@ -29,4 +30,8 @@ export class ProductResponseDto {
 
   @Expose()
   collections: CollectionProduit;
+
+  @Expose()
+  @Type(() => AvisResponseDto)
+  avis: AvisResponseDto[];  
 }

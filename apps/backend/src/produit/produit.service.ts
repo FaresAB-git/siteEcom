@@ -44,25 +44,36 @@ export class ProduitService {
     }
   }
 
-  async getProduct(productId: number): Promise<ProductResponseDto>{
-    try {
-      const produit = await this.prisma.produit.findUnique({
-        where: { id: productId }, 
-        include:{collections:
-          {include:{
-            collection:true
-            }
-          }}
-      });
-      console.log(produit);
-      return plainToInstance(ProductResponseDto, produit, { excludeExtraneousValues: true }); 
-    } catch (error) {
-      if (error instanceof PrismaClientKnownRequestError) {
-        throw error;
-      }
-      throw new InternalServerErrorException('Erreur lors de la récupération du produit');
+  async getProduct(productId: number): Promise<ProductResponseDto> {
+  try {
+    const produit = await this.prisma.produit.findUnique({
+      where: { id: productId },
+      include: {
+        collections: {
+          include: {
+            collection: true,
+          },
+        },
+        avis: true, 
+      },
+    });
+
+    if (!produit) {
+      throw new InternalServerErrorException('Produit non trouvé');
     }
+
+    return plainToInstance(ProductResponseDto, produit, {
+      excludeExtraneousValues: true,
+    });
+  } catch (error) {
+    if (error instanceof PrismaClientKnownRequestError) {
+      throw error;
+    }
+    throw new InternalServerErrorException(
+      'Erreur lors de la récupération du produit',
+    );
   }
+}
 
   async delProduct(productId: number): Promise<ProductResponseDto>{
     try {

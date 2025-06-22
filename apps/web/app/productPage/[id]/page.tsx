@@ -1,4 +1,5 @@
 //composant serveur
+import AvisSection from "../../components/AvisSection";
 import BtnCart from "../../components/BtnCart";
 import HorizontalNavBar from "../../components/HorizontalNavBar";
 import { getProduct } from "../../services/productServices";
@@ -18,6 +19,7 @@ export default async function ProductPage({params}: { params: Params }) {
   }
   
   const product: ProductResponseDto = await getProduct(id);
+  
 
  
   return (
@@ -36,6 +38,7 @@ export default async function ProductPage({params}: { params: Params }) {
         </div>
       </div>
     </div>
+    <AvisSection productId={product.id} initialAvis={product.avis} />
     </>
   );
   

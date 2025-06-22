@@ -4,6 +4,7 @@ import Link from "next/link";
 import style from "../../style/login.module.css";
 import { useRouter } from 'next/navigation';
 import { login, register } from "../../services/userServices";
+import HorizontalNavBar from "../../components/HorizontalNavBar";
 
 
 export default function Login() {
@@ -37,6 +38,7 @@ export default function Login() {
 
   return (
     <>
+      <HorizontalNavBar/>
       <div className={style.loginContainer}>
         <h2 className={style.loginTitle}>Login</h2>
         <p>Connectez-vous avec vos identifiants</p>

@@ -12,6 +12,7 @@
   z-index: 1000;
 }
 .logo {
+  display: flex;
   flex: 0 0 auto;
 }
 
@@ -21,6 +22,12 @@
   color: #333;
   text-decoration: none;
 }
+
+.offCanvaIcon{
+  margin-right: 15px;
+  display: none;
+}
+
 
 .nav {
   position: absolute;
@@ -42,7 +49,7 @@
   content: "";
   position: absolute;
   left: 0;
-  bottom: -4px; /* espace sous le texte */
+  bottom: -4px; 
   width: 0;
   height: 2px;
   background-color: currentColor;
@@ -59,10 +66,21 @@
 
 .cartContainer {
   position: fixed;
+  display: flex;
   top: 7px;
   right: 15px;
   z-index: 1001; /* supérieur à celui de la navbar si besoin */
 }
+
+.accountIconContainer{
+  position: fixed;
+  right: 60px;
+  border-radius: 50%;
+  padding: 10px;
+  cursor: pointer;
+  z-index: 999;
+}
+  
 
 .dropdownContainer {
   position: relative;
@@ -99,64 +117,54 @@
 }
 
 @media (max-width: 768px) {
-  .nav {
+  @media (max-width: 768px) {
+  .offCanvaIcon {
+    display: block;
+  }
+  .nav{
     display: none;
   }
-
-  .mobileMenuButton {
-    display: block;
-    position: absolute;
-    left: 16px;
-    top: 16px;
-    background: none;
-    border: none;
-    z-index: 1002;
-    color: #333;
-  }
-
-  .mobileMenuButton button {
-    background: none;
-    border: none;
-    cursor: pointer;
-  }
-
-  .mobileMenu {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    width: 250px;
-    background-color: white;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    z-index: 1001;
-    animation: slideIn 0.3s ease forwards;
-  }
-
-  .closeButton {
-    align-self: flex-end;
-    background: none;
-    border: none;
-    cursor: pointer;
-  }
-
-  .collectionTitle {
-    margin-top: 10px;
-    font-weight: bold;
-  }
-
-  @keyframes slideIn {
-    from {
-      transform: translateX(-100%);
-    }
-    to {
-      transform: translateX(0);
-    }
-  }
+}
 }
 
+.offMenu {
+  position: absolute;
+  top: 70px;
+  left: 0;
+  right: 0;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+}
+
+.offMenu a {
+  padding: 10px 0;
+  text-decoration: none;
+  color: #333;
+  font-size: 1rem;
+  border-bottom: 1px solid #eee;
+}
+
+.mobileCollectionToggle {
+  padding: 10px 0;
+  cursor: pointer;
+  font-weight: bold;
+  color: #333;
+}
+
+.mobileSubMenu {
+  display: flex;
+  flex-direction: column;
+  padding-left: 10px;
+}
+
+.mobileSubMenu a {
+  padding: 8px 0;
+  font-size: 0.95rem;
+  color: #555;
+}
 
 

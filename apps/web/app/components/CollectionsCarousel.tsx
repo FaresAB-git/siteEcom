@@ -21,23 +21,22 @@ export default function CollectionCarousel(){
       }, []);
     return(
         <div className={style.container}>
-        <h2 className={style.collectionTitle}> COLLECTIONS </h2>
-        <div className={style.carousselContainer}>
-        {collections.map((collection, index) => {
-            const transformedUrl = collection.imgPath?.replace(
-            '/upload/',
-            '/upload/w_900,h_600,c_fill,g_auto,f_auto,q_auto/'
-            );
+            <h2 className={style.collectionTitle}> COLLECTIONS </h2>
+            <div className={style.carousselContainer}>
+                {collections.map((collection, index) => {
+                    const transformedUrl = collection.imgPath?.replace(
+                    '/upload/',
+                    '/upload/w_900,h_600,c_fill,g_auto,f_auto,q_auto/'
+                    );
 
-            return (
-            <div className={style.collectionContainer} key={index}>
-                <img src={transformedUrl} className={style.imgCollection} />
-                <span className={style.collectionLink} onClick={() => router.push('/collectionProducts/' + collection.id)}>  {collection.nom}</span>
+                    return (
+                    <div className={style.collectionContainer} key={index}>
+                        <img src={transformedUrl} className={style.imgCollection} />
+                        <span className={style.collectionLink} onClick={() => router.push('/collectionProducts/' + collection.id)}>  {collection.nom}</span>
+                    </div>
+                    );
+                })}
             </div>
-            );
-        })}
-        </div>
-
         </div>
     );
 }

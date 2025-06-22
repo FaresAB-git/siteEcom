@@ -55,3 +55,50 @@
     background-color: white;
     color: grey;
 }
+
+
+@media screen and (max-width: 992px) {
+  .container {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .imageContainer,
+  .textContainer {
+    width: 100%;
+    text-align: center;
+  }
+
+  .prodImg {
+    width: 80%;
+    margin-left: 0;
+  }
+
+  .productName,
+  .productPrice,
+  .productDesc,
+  .panierBtn {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .productName {
+    margin-top: 30px;
+    font-size: 24px;
+  }
+
+  .productPrice {
+    font-size: 18px;
+  }
+
+  .productDesc {
+    width: 90%;
+    margin-top: 20px;
+  }
+
+  .panierBtn {
+    width: 80%;
+    margin-top: 50px;
+  }
+}

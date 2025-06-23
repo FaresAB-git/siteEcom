@@ -157,4 +157,20 @@
     height: auto; /* La hauteur s'ajuste automatiquement pour maintenir le ratio d'aspect */
     object-fit: contain; /* Assure que l'image conserve son ratio d'aspect sans être coupée ni étirée */
   }
+
+  @media (max-width: 768px) {
+  .mainContent {
+    margin-left: 0; 
+    padding: 10px;
+  }
+
+  .container {
+    width: 100%;
+    margin-top: 60px;
+    padding: 10px;
+  }
+  .productForm{
+    width: 80%;
+  }
+}
   

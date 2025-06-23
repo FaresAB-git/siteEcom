@@ -82,3 +82,17 @@
 .delIncon:hover{
     color: darkred;
 }
+
+@media (max-width: 768px) {
+  .mainContent {
+    margin-left: 0; 
+    padding: 10px;
+  }
+
+  .container {
+    width: 100%;
+    margin-top: 60px;
+    padding: 10px;
+  }
+
+}

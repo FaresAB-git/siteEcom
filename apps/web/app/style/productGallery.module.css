@@ -1,4 +1,3 @@
-
 .container {
   position: relative;
   width: 90%;
@@ -14,7 +13,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, 300px);
   gap: 1rem;
-  grid-row-gap: 3rem; 
+  grid-row-gap: 3rem; /* Espacement spécifique entre les lignes */
   padding: 1rem;
   justify-content: center;
   margin-bottom: 100px;
@@ -111,49 +110,3 @@
 .collectionLabel{
   width: 150px;
 }
-
-@media (max-width: 768px) {
-  .galleryContainer {
-    grid-template-columns: repeat(2, 1fr);
-    width: 100%;
-    padding: 1rem;
-  }
-
-  .productCard {
-    width: 100%;
-    height: auto;
-  }
-
-  .imageWrapper {
-    width: 100%;
-    height: 180px;
-  }
-
-  .productCard:hover .imageWrapper {
-    width: 100%;
-    height: 180px;
-  }
-
-  .filterBar {
-    position: static;
-    margin: 1rem auto;
-    width: 90%;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .searchInput {
-    width: 100%;
-  }
-
-  .sortButton {
-    width: 100%;
-  }
-}
-
-@media (max-width: 480px) {
-  .galleryContainer {
-    grid-template-columns: repeat(1, 1fr);
-  }
-}
-

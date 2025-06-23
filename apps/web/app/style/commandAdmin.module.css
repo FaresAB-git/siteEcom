@@ -76,3 +76,19 @@
 .rowBorder {
     border-bottom: 1px solid #e5e7eb;
 }
+
+@media (max-width: 768px) {
+  .mainContent {
+    margin-left: 0; 
+    padding: 10px;
+  }
+
+  .container {
+    width: 100%;
+    margin-top: 60px;
+    padding: 10px;
+  }
+  .productForm{
+    width: 80%;
+  }
+}

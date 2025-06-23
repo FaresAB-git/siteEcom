@@ -1,50 +1,75 @@
-.container{
-position: fixed;
-top: 50px;
-left: 0px;
-width: 200px;
-height: 100%;
-background-color:#E5E5E5;
-z-index: 1;
+.container {
+  position: fixed;
+  top: 50px;
+  left: 0;
+  width: 200px;
+  height: 100%;
+  background-color: #E5E5E5;
+  z-index: 1000;
+  transition: transform 0.3s ease-in-out;
 }
 
-.linkContainer{
-margin-top: 50px;
-display: flex;
-flex-direction: column;
-gap: 10px;
-text-align: center;
+/* Masqué par défaut sur mobile */
+@media (max-width: 768px) {
+  .container {
+    transform: translateX(-100%);
+  }
 
+  .open {
+    transform: translateX(0);
+  }
 }
 
-.navLink{
-width: 90%;
-height: 30px;
-border-radius: 5px;
-margin:auto;
-display: flex;
-flex-direction: row;
-text-decoration: none;
-color: black;
-
-}
-.navLink:hover{
-   background-color: whitesmoke;
-    
+.linkContainer {
+  margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: center;
 }
 
-.iconContainer{
-width: 30%;
-height: 100%;
-padding: 5px;
+.navLink {
+  width: 90%;
+  height: 30px;
+  border-radius: 5px;
+  margin: auto;
+  display: flex;
+  flex-direction: row;
+  text-decoration: none;
+  color: black;
 }
 
-.linkText{
- width: 100%;
- text-align: left;
- padding: 5px;
- 
+.navLink:hover {
+  background-color: whitesmoke;
 }
 
+.iconContainer {
+  width: 30%;
+  height: 100%;
+  padding: 5px;
+}
 
+.linkText {
+  width: 100%;
+  text-align: left;
+  padding: 5px;
+}
 
+/* Hamburger Button */
+.hamburger {
+  display: none;
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 1100;
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .hamburger {
+    display: block;
+  }
+}

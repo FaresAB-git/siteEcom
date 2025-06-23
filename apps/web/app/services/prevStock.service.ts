@@ -1,3 +1,5 @@
+import { API_URL } from "../../lib/api";
+
 type Prevision = {
   ventes7j: number;
   forecastDemandeProchainJour: number;
@@ -14,88 +16,88 @@ type PrevisionsResponse = {
     decroissant: Prevision;
   };
 };
+
 export async function createCommandTest(){
-    const response = await fetch("http://localhost:8000/stock-prev/genererCommandeTest",{
-        method:'POST',
-        headers:{
-            'Content-Type': 'application/json',
-        }
-    });
-
-    const data = await response.json();
-    console.log(data);
-    if(!response.ok){
-        throw new Error (data.message || 'erreur de connexion');
+  const response = await fetch(`${API_URL}/stock-prev/genererCommandeTest`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
     }
+  });
 
-    return data
+  const data = await response.json();
+  console.log(data);
+  if(!response.ok){
+    throw new Error(data.message || 'erreur de connexion');
+  }
+
+  return data;
 }
 
-export async function getPrevStockMATest(): Promise<PrevisionsResponse>{
-    const response = await fetch("http://localhost:8000/stock-prev/ma",{
-        method:'GET',
-        headers:{
-            'Content-Type': 'application/json',
-        }
-    });
-
-    const data = await response.json();
-    console.log(data);
-    if(!response.ok){
-        throw new Error (data.message || 'erreur de connexion');
+export async function getPrevStockMATest(): Promise<PrevisionsResponse> {
+  const response = await fetch(`${API_URL}/stock-prev/ma`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
     }
+  });
 
-    return data
+  const data = await response.json();
+  console.log(data);
+  if(!response.ok){
+    throw new Error(data.message || 'erreur de connexion');
+  }
+
+  return data;
 }
 
-export async function getPrevStockSESTest(): Promise<PrevisionsResponse>{
-    const response = await fetch("http://localhost:8000/stock-prev/SES",{
-        method:'GET',
-        headers:{
-            'Content-Type': 'application/json',
-        }
-    });
-
-    const data = await response.json();
-    console.log(data);
-    if(!response.ok){
-        throw new Error (data.message || 'erreur de connexion');
+export async function getPrevStockSESTest(): Promise<PrevisionsResponse> {
+  const response = await fetch(`${API_URL}/stock-prev/SES`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
     }
+  });
 
-    return data
+  const data = await response.json();
+  console.log(data);
+  if(!response.ok){
+    throw new Error(data.message || 'erreur de connexion');
+  }
+
+  return data;
 }
 
-export async function getPrevStockDESTest(): Promise<PrevisionsResponse>{
-    const response = await fetch("http://localhost:8000/stock-prev/DES",{
-        method:'GET',
-        headers:{
-            'Content-Type': 'application/json',
-        }
-    });
-
-    const data = await response.json();
-    console.log(data);
-    if(!response.ok){
-        throw new Error (data.message || 'erreur de connexion');
+export async function getPrevStockDESTest(): Promise<PrevisionsResponse> {
+  const response = await fetch(`${API_URL}/stock-prev/DES`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
     }
+  });
 
-    return data
+  const data = await response.json();
+  console.log(data);
+  if(!response.ok){
+    throw new Error(data.message || 'erreur de connexion');
+  }
+
+  return data;
 }
 
-export async function getVentesProduitTest(){
-    const response = await fetch("http://localhost:8000/stock-prev/ventesProduitTest",{
-        method:'GET',
-        headers:{
-            'Content-Type': 'application/json',
-        }
-    });
-
-    const data = await response.json();
-    console.log(data);
-    if(!response.ok){
-        throw new Error (data.message || 'erreur de connexion');
+export async function getVentesProduitTest() {
+  const response = await fetch(`${API_URL}/stock-prev/ventesProduitTest`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
     }
+  });
 
-    return data
+  const data = await response.json();
+  console.log(data);
+  if(!response.ok){
+    throw new Error(data.message || 'erreur de connexion');
+  }
+
+  return data;
 }
-

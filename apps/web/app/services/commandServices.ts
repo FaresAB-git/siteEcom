@@ -1,11 +1,11 @@
+import { API_URL } from "../../lib/api";
 import { CommandeResponseDto } from "../types/commandResponse.dto";
 import { CreateCommandeWithProduitsDto } from "../types/CreateCommandeWithProduits.dto";
 import { ProductResponseDto } from "../types/productResponse.dto";
 
-
 export async function createCommande(data: CreateCommandeWithProduitsDto) {
   try {
-    const response = await fetch('http://localhost:8000/commande', {
+    const response = await fetch(`${API_URL}/commande`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -26,16 +26,16 @@ export async function createCommande(data: CreateCommandeWithProduitsDto) {
   }
 }
 
-export async function getCommands():Promise<CommandeResponseDto[]>{
+export async function getCommands(): Promise<CommandeResponseDto[]> {
   try {
-    const response = await fetch("http://localhost:8000/commande",{
-      method:'GET',
-      credentials:'include'
+    const response = await fetch(`${API_URL}/commande`, {
+      method: 'GET',
+      credentials: 'include'
     });
 
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData.message || 'Erreur lors de la création de la commande');
+      throw new Error(errorData.message || 'Erreur lors de la récupération des commandes');
     }
 
     const result = await response.json();
@@ -47,19 +47,21 @@ export async function getCommands():Promise<CommandeResponseDto[]>{
   }
 }
 
-
-export async function getProductsByCommandId(productId: number):Promise<ProductResponseDto[]>{
+export async function getProductsByCommandId(productId: number): Promise<ProductResponseDto[]> {
   try {
-    const response = await fetch("http://localhost:8000/commande/produits/" + productId,{
-      method:'GET',
-      credentials:'include',
+    const response = await fetch(`${API_URL}/commande/produits/${productId}`, {
+      method: 'GET',
+      credentials: 'include',
     });
 
-    
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Erreur lors de la récupération des produits');
+    }
 
-    const result =  await response.json();
-    return result
-    
+    const result = await response.json();
+    return result;
+
   } catch (error) {
     console.error('Erreur dans getProductsByCommandId:', error);
     throw error;

@@ -30,10 +30,10 @@ export class AuthController {
     const tokenData = await this.authService.loginAdmin(dto);
 
     res.cookie('access_token', tokenData.access_token, {
-      httpOnly: true,           // Protège contre le XSS
-      secure: true,             // À mettre à true en prod (HTTPS obligatoire)
-      sameSite: 'none',          // Protection CSRF de base
-      maxAge: 10 * 60 * 60 * 1000, // 10 heures en ms
+      httpOnly: true,           // Protège contre XSS
+      secure: true,             //Doit être true car Railway utilise HTTPS
+      sameSite: 'none',         //Obligatoire pour autoriser cross-site cookie
+      maxAge: 10 * 60 * 60 * 1000, // 10 heures
     });
 
     return { message: 'Connexion réussie' };

@@ -9,11 +9,13 @@ export function middleware(request: NextRequest) {
   console.log('middleware');
 
   const token = request.cookies.get('access_token')?.value
+  console.log(token);
 
   const { pathname } = request.nextUrl
 
   // Si la route est protégée mais qu'on n'a pas de token => redirection vers la page de login
   if (protectedRoutes.includes(pathname) && !token) {
+    console.log("pas de token");
     return NextResponse.redirect(new URL('/admin/login', request.url))
   }
 

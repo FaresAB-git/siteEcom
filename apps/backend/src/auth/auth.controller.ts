@@ -34,6 +34,7 @@ export class AuthController {
       secure: true,             //Doit être true car Railway utilise HTTPS
       sameSite: 'none',         //Obligatoire pour autoriser cross-site cookie
       maxAge: 10 * 60 * 60 * 1000, // 10 heures
+      domain: '.siteecomfares.fr',
     });
 
     return { message: 'Connexion réussie' };

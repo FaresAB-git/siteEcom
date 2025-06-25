@@ -9,7 +9,7 @@ export async function createProduct(product: ProdDto, imageFile: File | null) {
   formData.append('file', imageFile);
   formData.append('upload_preset', 'votre_upload_preset');
 
-  const uploadRes = await fetch(`${API_URL}/produit`, {
+  const uploadRes = await fetch(`${API_URL}/upload`, {
     method: 'POST',
     body: formData,
     credentials: 'include',

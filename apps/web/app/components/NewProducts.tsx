@@ -5,7 +5,7 @@ import style from "../style/newProducts.module.css"
 import Image from "next/image";
 import { ProductResponseDto } from "../types/productResponse.dto";
 import React from "react";
-import Slider from 'react-slick'
+import Slider from 'react-slick';
 import { FaChevronRight, FaChevronLeft } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 

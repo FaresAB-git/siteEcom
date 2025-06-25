@@ -8,10 +8,10 @@
 }
 
 .galleryContainer {
-  width: 80%;
+  width: 60%;
   margin: auto;
   display: grid;
-  grid-template-columns: repeat(auto-fill, 250px);
+  grid-template-columns: repeat(auto-fill, 300px);
   gap: 1rem;
   grid-row-gap: 3rem; /* Espacement spécifique entre les lignes */
   padding: 1rem;

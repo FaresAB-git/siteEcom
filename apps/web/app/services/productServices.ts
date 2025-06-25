@@ -12,6 +12,7 @@ export async function createProduct(product: ProdDto, imageFile: File | null) {
   const uploadRes = await fetch(`${API_URL}/produit`, {
     method: 'POST',
     body: formData,
+    credentials: 'include',
   });
 
   if (!uploadRes.ok) {

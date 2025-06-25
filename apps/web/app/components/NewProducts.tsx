@@ -7,6 +7,7 @@ import { ProductResponseDto } from "../types/productResponse.dto";
 import React from "react";
 import Slider from 'react-slick'
 import { FaChevronRight, FaChevronLeft } from "react-icons/fa";
+import { useRouter } from "next/navigation";
 
 // Import slick carousel styles
 import "slick-carousel/slick/slick.css";
@@ -32,6 +33,7 @@ function SamplePrevArrow(props: any) {
 
 export default function NewProducts(){
     const [products, setProducts] = useState<ProductResponseDto[]>([]);
+    const router = useRouter();
 
     const settings = {
   dots: false,
@@ -94,7 +96,7 @@ export default function NewProducts(){
                 <Slider {...settings}>
                     {products.map((product) => (
                         <div key={product.id}>
-                            <div className={style.productCard}>
+                            <div className={style.productCard} onClick={() => router.push("/productPage/" + product.id)}>
                                 <div className={style.imageWrapper}>
                                     <Image
                                         src={product.imgPath || "/placeholder.png"}

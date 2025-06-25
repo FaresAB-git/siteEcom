@@ -358,12 +358,14 @@ export class DashboardService {
   return { message: `${nombre} fausses commandes générées pour la semaine dernière.` };
 }
 
-  async DeleteFakeCommandes() {
+async DeleteFakeCommandes() {
   const deleted = await this.prisma.commande.deleteMany({
     where: {
-      clientEmail: {
-        startsWith: 'fakeuser',
-      },
+      OR: [
+        { clientEmail: { startsWith: 'fakeuser' } },
+        { clientEmail: { startsWith: 'stableuser' } },
+        { clientEmail: { startsWith: 'decuser' } },
+      ],
     },
   });
 
